@@ -12,8 +12,8 @@ import gr.auth.ee.dsproject.crush.board.Board;
  * evaluate() method returns a score from 0.0 to less than but not
  * 100.0 depending on the distance of the closest move's tile to the 
  * top and is calculated as:
- *  "smaller_y * (100.0 / board_rows)"  
- * It it smaller for moves closest to the top, and greater for moves
+ *  "(board_rows - greater_y - 1) * (100.0 / board_rows)"  
+ * It is smaller for moves closest to the top, and greater for moves
  * closest to the bottom of the board.
  * 
  * Public constructors defined in DistanceFromTopHeuristic:
@@ -28,7 +28,7 @@ import gr.auth.ee.dsproject.crush.board.Board;
  * -public double evaluate()
  * 
  * @author Dimitrios Karageorgiou
- * @version 0.1
+ * @version 0.3
  */
 public class DistanceFromTopHeuristic extends Heuristic {
 	PlayerMove move;
@@ -96,22 +96,23 @@ public class DistanceFromTopHeuristic extends Heuristic {
 	 * on the associated board.
 	 * 
 	 * The evaluation is done as following:
-	 * 	"smaller_y * (100.0 / board_rows)"
-	 * where smaller_y is the smaller distance from top out the two tiles
-	 * PlayerMove object contains and board_rows is the number of rows
-	 * the Board object has.
+	 * 	"(board_rows - greater_y - 1) * (100.0 / board_rows)"
+	 * where greater_y is the greater distance from bottom out of the 
+	 * two tiles PlayerMove object contains and board_rows is the 
+	 * number of rows the Board object has.
 	 * 
 	 * @return A score between 0.0 and less than 100.0.
 	 */
 	@Override
 	public double evaluate() {
-		int smallerY;
+		int greaterY;
 		
-		// Use the smaller y out of two tiles to calculate the score.
-		if (move.getY1() < move.getY2()) smallerY = move.getY1(); 
-		else smallerY = move.getY2();
+		// Use the greater y out of two tiles to calculate the score.
+		if (move.getY1() > move.getY2()) greaterY = move.getY1(); 
+		else greaterY = move.getY2();
 				
-		return (100.0 / (double) board.getRows()) * (double) smallerY;
+		return (100.0 / (double) board.getPRows()) * 
+			   (board.getPRows() - (double) greaterY - 1.0);
 	}
 
 }
