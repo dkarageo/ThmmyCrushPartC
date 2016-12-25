@@ -6,47 +6,38 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Comparator;
-import java.util.TreeSet;
 
 import gr.auth.ee.dsproject.crush.board.CrushUtilities;
 import gr.auth.ee.dsproject.crush.board.Board;
 import gr.auth.ee.dsproject.crush.board.Tile;
-import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
 
 
 /**
  * BoardUtils contains utilities methods useful when working with a board.
- * Its methods are not static, so an object is required.
  * 
- * Public methods defined in BoardUtils:
+ * Static public methods defined in BoardUtils:
  * 
- * -public Board boardCopy(Board board) throws NullBoardRuntimeException
- * -public void doMove(Board board, PlayerMove move) 
- *			throws NullBoardRuntimeException, NullMoveRuntimeException
  * -public Set<Tile> findAdjacentSameColorTiles(Board board, Tile currentTile, int dirMax)
  *		throws NullBoardRuntimeException, NullTileRuntimeException
  * -public Set<Tile> findInDirectionSameColorTiles(Board board, Tile currentTile, int direction, int max)
  *		throws NullBoardRuntimeException, NullTileRuntimeException, InvalidDirectionRuntimeException
  * -public Set<Tile> findTilesThatCrush(Set<Tile> possibleAdjacentTiles)
- * -public Board getBoardAfterMoveAndCrush(Board board, PlayerMove move)
-		throws NullBoardRuntimeException, NullMoveRuntimeException
+ * 		throws NullBoardRuntimeException
  * -public static boolean isValidCords(Board board, int x, int y)
  * 		throws NullBoardRuntimeException
- * 
- * Static public methods defined in BoardUtils:
  * -public static boolean isValidCords(int x, int y)
  * 
  * Comparators defined in BoardUtils:
  * -public class TileFirstByYThenByX implements Comparator<Tile> 
  *  
  * Exceptions defined in BoardUtils:
- * -public class NullBoardRuntimeException extends RuntimeException
- * -public class NullTileRuntimeException extends RuntimeException
- * -public class InvalidDirectionsRuntimeException extends RuntimeException
- * -public class NullMoveRuntimeException extends RuntimeException
+ * -public static class NullBoardRuntimeException extends RuntimeException
+ * -public static class NullTileRuntimeException extends RuntimeException
+ * -public static class InvalidDirectionsRuntimeException extends RuntimeException
+ * -public static class NullMoveRuntimeException extends RuntimeException
  * 
  * @author Dimitrios Karageorgiou
- * @version 0.2
+ * @version 0.3
  */
 public class BoardUtils {
 	
@@ -61,129 +52,6 @@ public class BoardUtils {
 	
 	
 // ==== Public Methods ====
-	
-	/**
-	 * Returns a shallow copy of a Board object. Tile structure is completely
-	 * copied. Though tiles object themselves are NOT copied.
-	 *  
-	 * In case a null board reference is provided, it throws a
-	 * NullBoardRuntimeException.
-	 * 
-	 * @param board Board object to be copied.
-	 * @return A shallow copy of the given board object.
-	 * @throws NullBoardRuntimeException 
-	 */
-	public Board boardCopy(Board board) throws NullBoardRuntimeException {
-		if (board == null) throw new NullBoardRuntimeException();
-		
-		Board newBoard = new Board(board.getCols(), board.getRows(), 
-								   board.getWidth(), board.getHeight());
-		
-		for (int y = 0; y < board.getRows(); ++y) {
-			for (int x = 0; x < board.getCols(); ++x) {
-				newBoard.setTile(board.getTile(x, y));
-			}
-		}
-		
-		return newBoard;
-	}
-	
-	
-	/**
-	 * Return a copy of board given, where given move has been played
-	 * and tiles it caused to crush have been removed and new tiles
-	 * have filled the top of the board. 
-	 * 
-	 * It doesn't only search for tiles next to the ones consisting the
-	 * move, but searches the whole board for 3-or-more-in-a-row same
-	 * color tiles.
-	 * 
-	 * New tiles added to the top, do not get marked in any way so
-	 * if needed to be known how many and on which columns these tiles
-	 * added, it should be calculated externally.
-	 * 
-	 * In case a null board reference is provided, it throws a
-	 * NullBoardRuntimeException.
-	 * 
-	 * In case a null move reference is provided, it throws a
-	 * NullMoveRuntimeException.
-	 *  
-	 * @param board A board object which will be searched for same color
-	 * 				tile rows created after the move has been played. 
-	 * @param move A move to play on the board.
-	 * @return A board object from which every existing row of same color
-	 * 		   tiles after move has been played, is removed.
-	 * @throws NullBoardRuntimeException
-	 * @throws NullMoveRuntimeException
-	 */
-	public Board getBoardAfterMoveAndCrush(Board board, PlayerMove move)
-		throws NullBoardRuntimeException, NullMoveRuntimeException
-	{
-		if (board == null) throw new NullBoardRuntimeException();
-		if (move == null) throw new NullMoveRuntimeException();
-		
-		// Get a copy to work on and leave original one intact.
-		Board copiedBoard = boardCopy(board);
-		doMove(copiedBoard, move);
-		
-		// Tiles to be removed, board wide, sorted first by y, then by x
-		// in ascending order.
-		Set<Tile> removed = new TreeSet<>(new TileFirstByYThenByX());
-		
-		// Find every tile that participates in an uncrushed 
-		// 3-or-more-in-a-row on the board.
-		for (int y = 0; y < copiedBoard.getRows(); y++) {
-			for (int x = 0; x < copiedBoard.getCols(); x++) {
-				Set<Tile> adjacent = findAdjacentSameColorTiles(
-						copiedBoard, copiedBoard.getTile(x, y), 999);
-				adjacent.add(copiedBoard.getTile(x, y));  // current tile is also an adjacent one
-				
-				removed.addAll(findTilesThatCrush(adjacent));
-			}
-		}
-		
-		// For every tile that crushes, move that tile to the top of its
-		// column.
-		for (Tile t : removed) {			
-			for (int y = t.getY(); y > 0; y--) {
-				doMove(copiedBoard, new PlayerMove(
-							copiedBoard.getTile(t.getX(), y), 
-							copiedBoard.getTile(t.getX(), y - 1)
-				));
-			}
-		}
-		
-		return copiedBoard;
-	}
-	
-	/**
-	 * Switches the position of the two tiles defined by a PlayerMove
-	 * object.
-	 * 
-	 * In case a null board reference is provided, it throws a
-	 * NullBoardRuntimeException.
-	 * 
-	 * In case a null move reference is provided, it throws a
-	 * NullMoveRuntimeException.
-	 * 
-	 * @param board The board on which to switch position of tiles
-	 * 				defined by move.
-	 * @param move The move that defines the tiles to be switched.
-	 * @return Board reference it called with.
-	 * @throws NullBoardRuntimeException
-	 * @throws NullMoveRuntimeException
-	 */
-	public Board doMove(Board board, PlayerMove move) 
-			throws NullBoardRuntimeException,
-				   NullMoveRuntimeException
-	{
-		if (board == null) throw new NullBoardRuntimeException();
-		if (move == null) throw new NullMoveRuntimeException();
-		
-		board.moveTile(move.getX1(), move.getY1(), move.getX2(), move.getY2());
-		
-		return board;
-	}
 	
 	/**
 	 * Searches the given board for tiles adjacent to the one given one, 
@@ -209,7 +77,7 @@ public class BoardUtils {
 	 * @throws NullTileRuntimeException Thrown when a null currentTile reference 
 	 * 									is passed.
 	 */
-	public Set<Tile> findAdjacentSameColorTiles(Board board, Tile currentTile, int dirMax)
+	public static Set<Tile> findAdjacentSameColorTiles(Board board, Tile currentTile, int dirMax)
 		throws NullBoardRuntimeException, NullTileRuntimeException 
 	{
 		if (board == null) throw new NullBoardRuntimeException();
@@ -250,8 +118,8 @@ public class BoardUtils {
 	 * @throws InvalidDirectionsRuntimeException Thrown when a direction not specified
 	 * 							    			 in CrushUtilities is passed.
 	 */
-	public Set<Tile> findInDirectionSameColorTiles(Board board, Tile currentTile, 
-													int direction, int max)
+	public static Set<Tile> findInDirectionSameColorTiles(Board board, Tile currentTile, 
+														  int direction, int max)
 		throws NullBoardRuntimeException, NullTileRuntimeException , 
 			   InvalidDirectionsRuntimeException
 	{
@@ -324,12 +192,20 @@ public class BoardUtils {
 	 * If tiles that don't fit these criteria are given, the
 	 * return set may contain more tiles than the ones who
 	 * actually crush. 
+	 * 
+	 * If a null argument is provided for possibleAdjacentTiles parameter,
+	 * a NullTileRuntimeException is thrown. 
 	 *  
 	 * @param possibleAdjacentTiles A set of adjacent to the move's ones,
 	 * 		  						same color tiles.
 	 * @return A set of tiles that actually crush.
+	 * @throws NullTileRuntimeException
 	 */
-	public Set<Tile> findTilesThatCrush(Set<Tile> possibleAdjacentTiles) {
+	public static Set<Tile> findTilesThatCrush(Set<Tile> possibleAdjacentTiles)
+		throws NullTileRuntimeException
+	{
+		if (possibleAdjacentTiles == null) throw new NullTileRuntimeException();
+		
 		// NO TIME AND BORED = VERY BAD CODE! SHOULD BE SOMETIME FIXED!
 		
 		Set<Tile> crushTiles = new HashSet<>();
@@ -421,41 +297,40 @@ public class BoardUtils {
 
 	/**
 	 * Checks whether the given cords are between boundaries of
-	 * the board, as returned by board.getCols() and board.getRows().
+	 * the board, as returned by board.getCols() and 
+	 * board.getPRows().
 	 * 
 	 * @param board The board the cords will be checked on.
 	 * @param x x cord that is valid when is lower than board.getCols()
 	 * 			  and non negative.
-	 * @param y y cord that is valid when is lower than board.gerRows()
+	 * @param y y cord that is valid when is lower than board.getPRows()
 	 * 			  and non negative.
 	 * @return True for valid cords, false for invalid.
 	 */
-	public boolean isValidCords(Board board, int x, int y) {
+	public static boolean isValidCords(Board board, int x, int y) {
 		if (board == null) throw new NullBoardRuntimeException();
 		
 		if (x >= 0 && x < board.getCols() && 
-			y >= 0 && y < board.getRows()) {
+			y >= 0 && y < board.getPRows()) {
 			return true;
 		}
 		return false;
 	}
 
-	
-// ==== Static public methods defined in BoardUtils ====
-	
 	/**
 	 * Checks whether the given cords are between boundaries as
 	 * defined in CrushUtilities.
 	 * 
-	 * @param x x cord that is valid when is lower than CrushUtilities.NUMBER_OF_COLUMNS
-	 * 			  and non negative.
-	 * @param y y cord that is valid when is lower than CrushUtilities.NUMBER_OF_ROWS
-	 * 			  and non negative.
+	 * @param x x cord that is valid when is lower than 
+	 * 			CrushUtilities.NUMBER_OF_PLAYABLE_COLUMNS
+	 * 			and non negative.
+	 * @param y y cord that is valid when is lower than 
+	 * 			CrushUtilities.NUMBER_OF_ROWS and non negative.
 	 * @return True for valid cords, false for invalid.
 	 */
 	public static boolean isValidCords(int x, int y) {
 		if (x >= 0 && x < CrushUtilities.NUMBER_OF_COLUMNS && 
-			y >= 0 && y < CrushUtilities.NUMBER_OF_ROWS) {
+			y >= 0 && y < CrushUtilities.NUMBER_OF_PLAYABLE_ROWS) {
 			return true;
 		}
 		return false;
@@ -502,7 +377,7 @@ public class BoardUtils {
 	 * An exception to be thrown when a null board reference is encountered
 	 * where it normally shouldn't.
 	 */
-	public class NullBoardRuntimeException extends RuntimeException {
+	public static class NullBoardRuntimeException extends RuntimeException {
 		private static final long serialVersionUID = 1L;		
 	}
 	
@@ -510,7 +385,7 @@ public class BoardUtils {
 	 * An exception to be thrown when a null move reference is encountered
 	 * where it normally shouldn't.
 	 */
-	public class NullMoveRuntimeException extends RuntimeException {
+	public static class NullMoveRuntimeException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 	}
 	
@@ -518,7 +393,7 @@ public class BoardUtils {
 	 * An exception to thrown when a null tile reference is encountered where
 	 * it normally shouldn't.
 	 */
-	public class NullTileRuntimeException extends RuntimeException {
+	public static class NullTileRuntimeException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 	}
 		
@@ -526,7 +401,132 @@ public class BoardUtils {
 	 * An exception to be thrown when invalid directions are encountered where
 	 * it normally shouldn't.
 	 */
-	public class InvalidDirectionsRuntimeException extends RuntimeException {
+	public static class InvalidDirectionsRuntimeException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 	}
+	
+	
+// ==== Legacy Code ====
+	
+//	/**
+//	 * Returns a shallow copy of a Board object. Tile structure is completely
+//	 * copied. Though tiles object themselves are NOT copied.
+//	 *  
+//	 * In case a null board reference is provided, it throws a
+//	 * NullBoardRuntimeException.
+//	 * 
+//	 * @param board Board object to be copied.
+//	 * @return A shallow copy of the given board object.
+//	 * @throws NullBoardRuntimeException 
+//	 */
+//	public Board boardCopy(Board board) throws NullBoardRuntimeException {
+//		if (board == null) throw new NullBoardRuntimeException();
+//		
+//		Board newBoard = new Board(board.getCols(), board.getRows(), 
+//								   board.getWidth(), board.getHeight());
+//		
+//		for (int y = 0; y < board.getRows(); ++y) {
+//			for (int x = 0; x < board.getCols(); ++x) {
+//				newBoard.setTile(board.getTile(x, y));
+//			}
+//		}
+//		
+//		return newBoard;
+//	}
+//	
+//	/**
+//	 * Return a copy of board given, where given move has been played
+//	 * and tiles it caused to crush have been removed and new tiles
+//	 * have filled the top of the board. 
+//	 * 
+//	 * It doesn't only search for tiles next to the ones consisting the
+//	 * move, but searches the whole board for 3-or-more-in-a-row same
+//	 * color tiles.
+//	 * 
+//	 * New tiles added to the top, do not get marked in any way so
+//	 * if needed to be known how many and on which columns these tiles
+//	 * added, it should be calculated externally.
+//	 * 
+//	 * In case a null board reference is provided, it throws a
+//	 * NullBoardRuntimeException.
+//	 * 
+//	 * In case a null move reference is provided, it throws a
+//	 * NullMoveRuntimeException.
+//	 *  
+//	 * @param board A board object which will be searched for same color
+//	 * 				tile rows created after the move has been played. 
+//	 * @param move A move to play on the board.
+//	 * @return A board object from which every existing row of same color
+//	 * 		   tiles after move has been played, is removed.
+//	 * @throws NullBoardRuntimeException
+//	 * @throws NullMoveRuntimeException
+//	 */
+//	public Board getBoardAfterMoveAndCrush(Board board, PlayerMove move)
+//		throws NullBoardRuntimeException, NullMoveRuntimeException
+//	{
+//		if (board == null) throw new NullBoardRuntimeException();
+//		if (move == null) throw new NullMoveRuntimeException();
+//		
+//		// Get a copy to work on and leave original one intact.
+//		Board copiedBoard = boardCopy(board);
+//		doMove(copiedBoard, move);
+//		
+//		// Tiles to be removed, board wide, sorted first by y, then by x
+//		// in ascending order.
+//		Set<Tile> removed = new TreeSet<>(new TileFirstByYThenByX());
+//		
+//		// Find every tile that participates in an uncrushed 
+//		// 3-or-more-in-a-row on the board.
+//		for (int y = 0; y < copiedBoard.getRows(); y++) {
+//			for (int x = 0; x < copiedBoard.getCols(); x++) {
+//				Set<Tile> adjacent = findAdjacentSameColorTiles(
+//						copiedBoard, copiedBoard.getTile(x, y), 999);
+//				adjacent.add(copiedBoard.getTile(x, y));  // current tile is also an adjacent one
+//				
+//				removed.addAll(findTilesThatCrush(adjacent));
+//			}
+//		}
+//		
+//		// For every tile that crushes, move that tile to the top of its
+//		// column.
+//		for (Tile t : removed) {			
+//			for (int y = t.getY(); y > 0; y--) {
+//				doMove(copiedBoard, new PlayerMove(
+//							copiedBoard.getTile(t.getX(), y), 
+//							copiedBoard.getTile(t.getX(), y - 1)
+//				));
+//			}
+//		}
+//		
+//		return copiedBoard;
+//	}
+//	
+//	/**
+//	 * Switches the position of the two tiles defined by a PlayerMove
+//	 * object.
+//	 * 
+//	 * In case a null board reference is provided, it throws a
+//	 * NullBoardRuntimeException.
+//	 * 
+//	 * In case a null move reference is provided, it throws a
+//	 * NullMoveRuntimeException.
+//	 * 
+//	 * @param board The board on which to switch position of tiles
+//	 * 				defined by move.
+//	 * @param move The move that defines the tiles to be switched.
+//	 * @return Board reference it called with.
+//	 * @throws NullBoardRuntimeException
+//	 * @throws NullMoveRuntimeException
+//	 */
+//	public Board doMove(Board board, PlayerMove move) 
+//			throws NullBoardRuntimeException,
+//				   NullMoveRuntimeException
+//	{
+//		if (board == null) throw new NullBoardRuntimeException();
+//		if (move == null) throw new NullMoveRuntimeException();
+//		
+//		board.moveTile(move.getX1(), move.getY1(), move.getX2(), move.getY2());
+//		
+//		return board;
+//	}
 }
