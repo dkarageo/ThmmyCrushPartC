@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import gr.auth.ee.dsproject.crush.CrushUtilities;
+import gr.auth.ee.dsproject.crush.board.CrushUtilities;
 import gr.auth.ee.dsproject.crush.board.Tile;
 import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
 
