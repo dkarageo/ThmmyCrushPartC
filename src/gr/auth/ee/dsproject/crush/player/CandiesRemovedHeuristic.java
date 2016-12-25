@@ -7,6 +7,7 @@ import java.util.Set;
 
 import gr.auth.ee.dsproject.crush.heuristics.Heuristic;
 import gr.auth.ee.dsproject.crush.board.Board;
+import gr.auth.ee.dsproject.crush.board.CrushUtilities;
 import gr.auth.ee.dsproject.crush.board.Tile;
 import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
 import gr.auth.ee.dsproject.crush.util.BoardUtils;
@@ -41,21 +42,18 @@ import gr.auth.ee.dsproject.crush.util.BoardUtils;
  * -public Board getBoard()
  * -public PlayerMove getPlayerMove()
  * -public double evaluate()
- * 
- * Private methods defined in CandiesRemovedHeuristic:
- * -private Set<Tile> initialCandiesRemoved()
- * -private int countChainedCandiesRemoved(Board currentBoard, Set<Tile> removed, 
- *										   Map<Integer, Integer> previousHoles)
- * -private PlayerMove findAFakeMove(Board currentBoard, Map<Integer, Integer> holes)
- * -private void updateHoles(Set<Tile> removed, Map<Integer, Integer> holes)
- * -private Set<Tile> findCandiesThatCrushWithHoles(Board board, Map<Integer, Integer> holes)
- * -private Set<Tile> findVerticalCrushCandiesWithHoles(Board board, int column, 
- *														Map<Integer, Integer> holes)
- * -private Set<Tile> findHorizontalCrushCandiesWithHoles(Board board, int row,
- *														  Map<Integer, Integer> holes)																			   
+ * -public Set<Tile> initialCandiesRemoved()
+ * -public int countChainedCandiesRemoved(Board currentBoard, Set<Tile> removed, 
+ *										  Map<Integer, Integer> previousHoles)
+ * -public void updateHoles(Set<Tile> removed, Map<Integer, Integer> holes)
+ * -public Set<Tile> findCandiesThatCrushWithHoles(Board board, Map<Integer, Integer> holes)
+ * -public Set<Tile> findVerticalCrushCandiesWithHoles(Board board, int column, 
+ *													   Map<Integer, Integer> holes)
+ * -public Set<Tile> findHorizontalCrushCandiesWithHoles(Board board, int row,
+ *			                                             Map<Integer, Integer> holes)																			   
  * 
  * @author Dimitrios Karageorgiou
- * @version 0.2
+ * @version 0.3
  */
 public class CandiesRemovedHeuristic extends Heuristic {
 	
@@ -158,7 +156,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		overallCandiesRemoved += initialRemoved.size();
 		
 		// Calculate the tiles removed by chained moves.
-		Board justAfterCrush = new BoardUtils().getBoardAfterMoveAndCrush(board, move);
+		Board justAfterCrush = CrushUtilities.boardAfterFirstCrush(board, move.toDirArray());
 		overallCandiesRemoved += countChainedCandiesRemoved(justAfterCrush, initialRemoved, null);
 		
 		if (overallCandiesRemoved > 6) {
@@ -201,14 +199,14 @@ public class CandiesRemovedHeuristic extends Heuristic {
 	 * with their original cords they have before move.
 	 */
 	public Set<Tile> initialCandiesRemoved() {
-		BoardUtils utils = new BoardUtils();
+		// Get a copy of the real board object, and play the move on it,
+		// but without any crushes.
+		Board boardJustBeforeCrush = CrushUtilities.cloneBoard(board);
 		
-		// Get a copy of the real board object, so to safely switch the
-		// move tiles.
-		Board boardJustBeforeCrush = utils.boardCopy(board);
-		utils.doMove(boardJustBeforeCrush, move); // Do the move, but without crush
-												  // so to count the candies to be removed.
-		
+		boardJustBeforeCrush = CrushUtilities.boardAfterFirstMove(
+				boardJustBeforeCrush, move.toDirArray()
+		); 
+				
 		// Place here all tiles possible to be removed from copied board.
 		Set<Tile> tilesForRemoval = new HashSet<>();
 				
@@ -221,7 +219,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		
 		for (Tile t : afterMoveTiles) {
 			// Find all the same color tiles around the current one.
-			Set<Tile> curTiles = utils.findAdjacentSameColorTiles(boardJustBeforeCrush, t, 2);
+			Set<Tile> curTiles = BoardUtils.findAdjacentSameColorTiles(boardJustBeforeCrush, t, 2);
 			
 			tilesForRemoval.addAll(curTiles);
 			tilesForRemoval.add(t);  // The beginning tile is also an one possible for removal.
@@ -229,7 +227,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		
 		// Finally find which of the adjacent tiles on copied board form 
 		// at least a 3-in-a-row to crush.
-		tilesForRemoval = utils.findTilesThatCrush(tilesForRemoval);
+		tilesForRemoval = BoardUtils.findTilesThatCrush(tilesForRemoval);
 		
 		// And now find the actual tile objects of the real board,
 		// that corresponds to the ones in the copy. This is the set
@@ -313,49 +311,13 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		
 		// Find the tiles that can be removed from the board, i.e. they crush. 
 	    Set<Tile> tilesForRemoval = findCandiesThatCrushWithHoles(currentBoard, previousHoles);
-		
-		// Find a move that will be based on holes, so it will have no effect.
-		PlayerMove fakeMove = findAFakeMove(currentBoard, previousHoles);
-		// Use boardAfterFirstCrush on a non-sense move, just to crush all the currently 
-		// formed 3-or-more-in-the-row and provide for recursion a board just after 
-		// the crush of all same color groups formed by this current chain move. 
-		currentBoard = new BoardUtils().getBoardAfterMoveAndCrush(currentBoard, fakeMove);
+		 
+		currentBoard = CrushUtilities.boardAfterDeletingNples(currentBoard, currentBoard.getPRows());
 		
 		return tilesForRemoval.size() + countChainedCandiesRemoved(
 											currentBoard, tilesForRemoval, previousHoles);
 	}
-	
-	/**
-	 * Finds a move on the given board that is purely based on holes, meaning
-	 * that it will return a move which causes two holes to switch.
-	 * 
-	 * @param currentBoard The board which will be searched for a fake move.
-	 * @param holes A map that uses as keys the x position, i.e. the column
-	 * 				index. As values it takes the number of holes, i.e. the
-	 * 				number of newly introduced and of unknown color candies 
-	 * 				to the top of every column.
-	 * @return A move based on tiles defined as holes.
-	 */
-	public PlayerMove findAFakeMove(Board currentBoard, Map<Integer, Integer> holes) {
-		PlayerMove move = new PlayerMove();
 		
-		for(Integer i : holes.keySet()) {
-			// Search for a horizontal move
-			if (holes.containsKey(i + 1)) {
-				move.setTiles(currentBoard.getTile(i, 0), currentBoard.getTile(i + 1, 0));
-				break;
-			}
-			
-			// Search for a vertical move
-			if (holes.get(i) >= 2) {
-				move.setTiles(currentBoard.getTile(i, 0), currentBoard.getTile(i, 1));
-				break;
-			}
-		}
-		
-		return move;
-	}
-	
 	/**
 	 * Updates the holes map given, by incrementing the holes number on
 	 * every column for every removed tile on this column.
@@ -402,7 +364,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		}
 		
 		// Search for matching tiles horizontally, i.e. every row.
-		for (int y = 0; y < board.getRows(); y++) {
+		for (int y = 0; y < board.getPRows(); y++) {
 			crushTiles.addAll(findHorizontalCrushCandiesWithHoles(board, y, holes));
 		}
 		
@@ -432,21 +394,20 @@ public class CandiesRemovedHeuristic extends Heuristic {
 	{
 		Set<Tile> crushCandies = new HashSet<>();
 		
-		int y;
+		int max_y;
 		
-		// On vertical search, first valid index should be the one just
-		// after the holes to the top.
+		// On vertical search, max vertical index is the one before holes.
 		if (holes.containsKey(column)) {
-			y = holes.get(column);
+			max_y = board.getPRows() - 1 - holes.get(column);
 		} else {
-			y = 0;  // No holes means start from the beginning.
+			max_y = board.getPRows() - 1;  // No holes means go till the end.
 		}
 		
 		Tile previous = null;  // The previous tile at every loop.
 		Set<Tile> tempTiles = new HashSet<>();  // Temporarily keep the equal 
 												// asserted row here.
 		
-		for(;y < board.getRows(); y++) {
+		for(int y = 0; y <= max_y; y++) {
 			Tile current = board.getTile(column, y);
 			
 			if (previous != null) { // null means current is the first tile.
@@ -465,7 +426,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 			
 			// On last y, tiles won't be saved automatically because
 			// saving is done on the next loop. So save them manually.
-			if ((y == board.getRows() -1) && tempTiles.size() > 2) {
+			if ((y == max_y) && tempTiles.size() > 2) {
 				crushCandies.addAll(tempTiles);
 			}
 		}
@@ -510,7 +471,8 @@ public class CandiesRemovedHeuristic extends Heuristic {
 			// clear the temp tiles, but firstly save these tiles if they form at least
 			// a three row.
 			if(previous != null && 
-			   ((current.getColor() != previous.getColor()) || row < currentHoles)) 
+			   ((current.getColor() != previous.getColor()) || 
+			    row > board.getPRows() - currentHoles - 1)) 
 			{
 				if (tempTiles.size() > 2) crushCandies.addAll(tempTiles);
 				tempTiles.clear();
@@ -519,7 +481,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 			// Though the set has been cleared, if current tile marked as
 			// a hole is added to tempTiles, it will not be checked again
 			// and will be considered a valid tile.
-			if (row >= currentHoles) tempTiles.add(current);
+			if (row <= board.getPRows() - currentHoles - 1) tempTiles.add(current);
 			
 			previous = current;
 			
@@ -535,38 +497,70 @@ public class CandiesRemovedHeuristic extends Heuristic {
 
 	
 // ==== Unused Code ====
-	
-	/*
-	 * Scan the defined line of candies, for candies that participate in
-	 * 3-or-more-in-the-row, but ignoring candies specified as holes. 
-	 * 
-	 * When vertical is set to false, a line of candies is considered a
-	 * row of the board. In this case, line parameter defines the index
-	 * of the row, i.e. the y cord of every row.
-	 * 
-	 * When vertical is set to true, a line of candies is considered a
-	 * column of the board. In this case, line parameter defines the index
-	 * of the column, i.e. the x cord of every column.
-	 * 
-	 * @param board The board the line of candies is taken from.
-	 * @param line The index of the line. Row index when vertical set to false,
-	 * 			   column index when vertical set to true.
-	 * @param vertical Defines whether the line of candies is a row or a column
-	 * 				   of the given board. For row set to false, for column set
-	 * 				   to true.
-	 * @param holes A map that uses as keys the x position, i.e. the column
-	 * 				index. As values it takes the number of holes, i.e. the
-	 * 				number of newly introduced and of unknown color candies 
-	 * 				to the top of every column.
-	 * @return : A set containing the tiles of the line 
-	 
-	private Set<Tile> findOrientedInLineCrushCandiesWithHoles(
-			Board board, int line, boolean vertical, Map<Integer, Integer> holes)
-	{
-		Set<Tile> crushCandies = new HashSet<>();
-						
-		if (vertical) {}
-		else { xIncr = 1; }
-	}
-	*/
+//	
+//	/**
+//	 * Finds a move on the given board that is purely based on holes, meaning
+//	 * that it will return a move which causes two holes to switch.
+//	 * 
+//	 * @param currentBoard The board which will be searched for a fake move.
+//	 * @param holes A map that uses as keys the x position, i.e. the column
+//	 * 				index. As values it takes the number of holes, i.e. the
+//	 * 				number of newly introduced and of unknown color candies 
+//	 * 				to the top of every column.
+//	 * @return A move based on tiles defined as holes.
+//	 */
+//	public PlayerMove findAFakeMove(Board currentBoard, Map<Integer, Integer> holes) {
+//		PlayerMove move = new PlayerMove();
+//		
+//		for(Integer i : holes.keySet()) {
+//			// Search for a horizontal move
+//			if (holes.containsKey(i + 1)) {
+//				move.setTiles(currentBoard.getTile(i, 0), currentBoard.getTile(i + 1, 0));
+//				break;
+//			}
+//			
+//			// Search for a vertical move
+//			if (holes.get(i) >= 2) {
+//				move.setTiles(currentBoard.getTile(i, 0), currentBoard.getTile(i, 1));
+//				break;
+//			}
+//		}
+//		
+//		return move;
+//	}
+//	
+//	
+//	/*
+//	 * Scan the defined line of candies, for candies that participate in
+//	 * 3-or-more-in-the-row, but ignoring candies specified as holes. 
+//	 * 
+//	 * When vertical is set to false, a line of candies is considered a
+//	 * row of the board. In this case, line parameter defines the index
+//	 * of the row, i.e. the y cord of every row.
+//	 * 
+//	 * When vertical is set to true, a line of candies is considered a
+//	 * column of the board. In this case, line parameter defines the index
+//	 * of the column, i.e. the x cord of every column.
+//	 * 
+//	 * @param board The board the line of candies is taken from.
+//	 * @param line The index of the line. Row index when vertical set to false,
+//	 * 			   column index when vertical set to true.
+//	 * @param vertical Defines whether the line of candies is a row or a column
+//	 * 				   of the given board. For row set to false, for column set
+//	 * 				   to true.
+//	 * @param holes A map that uses as keys the x position, i.e. the column
+//	 * 				index. As values it takes the number of holes, i.e. the
+//	 * 				number of newly introduced and of unknown color candies 
+//	 * 				to the top of every column.
+//	 * @return : A set containing the tiles of the line 
+//	 
+//	private Set<Tile> findOrientedInLineCrushCandiesWithHoles(
+//			Board board, int line, boolean vertical, Map<Integer, Integer> holes)
+//	{
+//		Set<Tile> crushCandies = new HashSet<>();
+//						
+//		if (vertical) {}
+//		else { xIncr = 1; }
+//	}
+//	*/
 }
