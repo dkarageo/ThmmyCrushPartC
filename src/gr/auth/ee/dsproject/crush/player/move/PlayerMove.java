@@ -33,7 +33,7 @@ import gr.auth.ee.dsproject.crush.board.Tile;
  *  -public int[] toDirArray() throws SameTilesRuntimeException, InvalidDirectionRuntimeException
  *  
  * @author Dimitrios Karageorgiou
- * @version 1.0
+ * @version 1.1
  * 
  */
 public class PlayerMove {
@@ -276,9 +276,9 @@ public class PlayerMove {
 		} else if (x1 < x2 && y1 == y2) {
 			direction = CrushUtilities.RIGHT;
 		} else if (y1 > y2 && x1 == x2) {
-			direction = CrushUtilities.UP;
-		} else if (y1 < y2 && x1 == x2) {
 			direction = CrushUtilities.DOWN;
+		} else if (y1 < y2 && x1 == x2) {
+			direction = CrushUtilities.UP;
 		} else if (x1 == x2 && y1 == y2) {
 			throw new SameTilesRuntimeException();
 		} else {
@@ -297,7 +297,7 @@ public class PlayerMove {
 	 * An exception that may be raised when someone tries to pass
 	 * a null tile reference to a PlayerMove object. 
 	 */
-	public class NullTileRuntimeException extends RuntimeException {
+	public static class NullTileRuntimeException extends RuntimeException {
 		static final long serialVersionUID = 1;
 	}
 	
@@ -306,7 +306,7 @@ public class PlayerMove {
 	 * a PlayerMove object whose two tiles slot are not filled
 	 * with valid Tile objects.
 	 */
-	public class EmptyMoveRuntimeException extends RuntimeException {
+	public static class EmptyMoveRuntimeException extends RuntimeException {
 		static final long serialVersionUID = 1;
 	}
 	
@@ -314,7 +314,7 @@ public class PlayerMove {
 	 * An exception that may be raised when someone tries to pass,
 	 * an other than null, invalid move to PlayerMove object.
 	 */
-	public class InvalidMoveRuntimeException extends RuntimeException {
+	public static class InvalidMoveRuntimeException extends RuntimeException {
 		static final long serialVersionUID = 1;
 	}
 	
@@ -322,7 +322,7 @@ public class PlayerMove {
 	 * An exception that may be thrown when move is found to contain
 	 * two tiles with the same cords.
 	 */
-	public class SameTilesRuntimeException extends RuntimeException {
+	public static class SameTilesRuntimeException extends RuntimeException {
 		static final long serialVersionUID = 1;
 	}
 	
@@ -330,7 +330,7 @@ public class PlayerMove {
 	 * An exception that may be thrown when a move is consisted of tiles
 	 * not adjacent in directions defined in CrushUtilities.
 	 */
-	public class InvalidDirectionRuntimeException extends RuntimeException {
+	public static class InvalidDirectionRuntimeException extends RuntimeException {
 		static final long serialVersionUID = 1;
 	}
 }

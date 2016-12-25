@@ -456,7 +456,7 @@ public class PlayerMoveTest {
 	
 	@Test
 	public void testToDirArrayUpDirection() {
-		PlayerMove move = new PlayerMove(new Tile(0, 1, 1, 1, false), new Tile(1, 1, 0, 2, false));
+		PlayerMove move = new PlayerMove(new Tile(0, 1, 1, 1, false), new Tile(1, 1, 2, 2, false));
 		
 		int[] expected = {1, 1, CrushUtilities.UP};
 		
@@ -465,7 +465,7 @@ public class PlayerMoveTest {
 	
 	@Test
 	public void testToDirArrayDownDirection() {
-		PlayerMove move = new PlayerMove(new Tile(0, 1, 1, 1, false), new Tile(1, 1, 2, 2, false));
+		PlayerMove move = new PlayerMove(new Tile(0, 1, 1, 1, false), new Tile(1, 1, 0, 2, false));
 		
 		int[] expected = {1, 1, CrushUtilities.DOWN};
 		
