@@ -163,7 +163,7 @@ public class BoardUtils {
 			
 			if (!isValidCords(board, nextX, nextY)) break; // board's boundaries have been met
 			
-			nextTile = board.getTile(nextX, nextY);
+			nextTile = board.getTileAt(nextX, nextY);
 			
 			// If a matching tile is found add it to the set, 
 			// else quit searching.
@@ -427,7 +427,7 @@ public class BoardUtils {
 //		
 //		for (int y = 0; y < board.getRows(); ++y) {
 //			for (int x = 0; x < board.getCols(); ++x) {
-//				newBoard.setTile(board.getTile(x, y));
+//				newBoard.setTile(board.getTileAt(x, y));
 //			}
 //		}
 //		
@@ -480,8 +480,8 @@ public class BoardUtils {
 //		for (int y = 0; y < copiedBoard.getRows(); y++) {
 //			for (int x = 0; x < copiedBoard.getCols(); x++) {
 //				Set<Tile> adjacent = findAdjacentSameColorTiles(
-//						copiedBoard, copiedBoard.getTile(x, y), 999);
-//				adjacent.add(copiedBoard.getTile(x, y));  // current tile is also an adjacent one
+//						copiedBoard, copiedBoard.getTileAt(x, y), 999);
+//				adjacent.add(copiedBoard.getTileAt(x, y));  // current tile is also an adjacent one
 //				
 //				removed.addAll(findTilesThatCrush(adjacent));
 //			}
@@ -492,8 +492,8 @@ public class BoardUtils {
 //		for (Tile t : removed) {			
 //			for (int y = t.getY(); y > 0; y--) {
 //				doMove(copiedBoard, new PlayerMove(
-//							copiedBoard.getTile(t.getX(), y), 
-//							copiedBoard.getTile(t.getX(), y - 1)
+//							copiedBoard.getTileAt(t.getX(), y), 
+//							copiedBoard.getTileAt(t.getX(), y - 1)
 //				));
 //			}
 //		}

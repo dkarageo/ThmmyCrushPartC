@@ -156,7 +156,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		overallCandiesRemoved += initialRemoved.size();
 		
 		// Calculate the tiles removed by chained moves.
-		Board justAfterCrush = CrushUtilities.boardAfterFirstCrush(board, move.toDirArray());
+		Board justAfterCrush = CrushUtilities.boardAfterFirstMove(board, move.toDirArray());
 		overallCandiesRemoved += countChainedCandiesRemoved(justAfterCrush, initialRemoved, null);
 		
 		if (overallCandiesRemoved > 6) {
@@ -203,18 +203,18 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		// but without any crushes.
 		Board boardJustBeforeCrush = CrushUtilities.cloneBoard(board);
 		
-		boardJustBeforeCrush = CrushUtilities.boardAfterFirstMove(
+		boardJustBeforeCrush = CrushUtilities.boardAfterMovingCandies(
 				boardJustBeforeCrush, move.toDirArray()
-		); 
-				
+		);
+		
 		// Place here all tiles possible to be removed from copied board.
 		Set<Tile> tilesForRemoval = new HashSet<>();
 				
 		// Get the tiles that exist at cords specified by move on copied board, 
 		// after the move has taken place.
 		Tile[] afterMoveTiles = {
-				boardJustBeforeCrush.getTile(move.getX1(), move.getY1()),
-				boardJustBeforeCrush.getTile(move.getX2(), move.getY2())
+				boardJustBeforeCrush.getTileAt(move.getX1(), move.getY1()),
+				boardJustBeforeCrush.getTileAt(move.getX2(), move.getY2())
 		};
 		
 		for (Tile t : afterMoveTiles) {
@@ -253,7 +253,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		
 		// Match the tiles to the ones on the real board.
 		for (Tile t : tilesForRemoval) {
-			removedOnActualBoard.add(board.getTile(t.getX(), t.getY()));
+			removedOnActualBoard.add(board.getTileAt(t.getX(), t.getY()));
 		}
 		
 		return removedOnActualBoard;
@@ -408,7 +408,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 												// asserted row here.
 		
 		for(int y = 0; y <= max_y; y++) {
-			Tile current = board.getTile(column, y);
+			Tile current = board.getTileAt(column, y);
 			
 			if (previous != null) { // null means current is the first tile.
 				
@@ -460,7 +460,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		Tile previous = null;
 		
 		for(int x = 0; x < board.getCols(); x++) {
-			Tile current = board.getTile(x, row);
+			Tile current = board.getTileAt(x, row);
 			
 			// Get the number of holes at the top of current column.
 			int currentHoles = 0;
@@ -515,13 +515,13 @@ public class CandiesRemovedHeuristic extends Heuristic {
 //		for(Integer i : holes.keySet()) {
 //			// Search for a horizontal move
 //			if (holes.containsKey(i + 1)) {
-//				move.setTiles(currentBoard.getTile(i, 0), currentBoard.getTile(i + 1, 0));
+//				move.setTiles(currentBoard.getTileAt(i, 0), currentBoard.getTileAt(i + 1, 0));
 //				break;
 //			}
 //			
 //			// Search for a vertical move
 //			if (holes.get(i) >= 2) {
-//				move.setTiles(currentBoard.getTile(i, 0), currentBoard.getTile(i, 1));
+//				move.setTiles(currentBoard.getTileAt(i, 0), currentBoard.getTileAt(i, 1));
 //				break;
 //			}
 //		}
