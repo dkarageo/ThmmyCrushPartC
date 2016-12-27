@@ -76,7 +76,7 @@ public class MinMaxPlayer implements AbstractPlayer
     	createChildren(root, board, availableMoves, 0);
     	
     	// Create the minimax tree to a depth of 4.
-    	evaluateMinimax(root, 2, -Double.MAX_VALUE, Double.MAX_VALUE, true);
+    	evaluateMinimax(root, 1, -Double.MAX_VALUE, Double.MAX_VALUE, true);
     	
     	// Return the highest scoring move out of minimax tree.
     	return findBestMove(root).toCordsArray();
@@ -90,9 +90,7 @@ public class MinMaxPlayer implements AbstractPlayer
      * @param root
      * @return
      */
-    private PlayerMove findBestMove (Node root) {        
-    	System.out.print("Finfind best move");
-    	
+    private PlayerMove findBestMove (Node root) {    	
     	PlayerMove bestMove = null;
     	double max = -Double.MAX_VALUE;
     	    	
@@ -104,8 +102,6 @@ public class MinMaxPlayer implements AbstractPlayer
     			bestMove = child.getNodeMove();
     		}
     	}
-    	
-    	System.out.println("x1: " + bestMove.getX1() + " y1: " + bestMove.getY1() + " x2: " + bestMove.getX2() + " y2: " + bestMove.getY2());
     	
     	return bestMove;
     }
@@ -148,11 +144,13 @@ public class MinMaxPlayer implements AbstractPlayer
 	    	double cMax = -Double.MAX_VALUE;
 	    		    	
 	    	for (Node child : curNode.getChildren()) {  			    		
+	    		Board childChildrenBoard = CrushUtilities.boardAfterFullMove(
+						child.getNodeBoard(), child.getNodeMove().toDirArray());
+	    		
 	    		createChildren(
 	    				child, 
-	    				CrushUtilities.boardAfterFullMove(
-	    						child.getNodeBoard(), child.getNodeMove().toDirArray()),
-	    				CrushUtilities.getAvailableMoves(child.getNodeBoard()),
+	    				childChildrenBoard,
+	    				CrushUtilities.getAvailableMoves(childChildrenBoard),
 	    				child.getNodeEvaluation()
 	    		);
 	    		
@@ -165,7 +163,7 @@ public class MinMaxPlayer implements AbstractPlayer
 	    		}
 	    	}
 	    	
-	    	curNode.setNodeEvaluation(cMax + curNode.getNodeEvaluation());
+	    	curNode.setNodeEvaluation(curNode.getNodeEvaluation());
 	    	
 	    	return curNode.getNodeEvaluation();
 	    } else {
@@ -183,11 +181,13 @@ public class MinMaxPlayer implements AbstractPlayer
 	    	double cMin = Double.MAX_VALUE;
 	    		    	
 	    	for (Node child : curNode.getChildren()) {  			    		
+	    		Board childChildrenBoard = CrushUtilities.boardAfterFullMove(
+						child.getNodeBoard(), child.getNodeMove().toDirArray());
+	    		
 	    		createChildren(
 	    				child, 
-	    				CrushUtilities.boardAfterFullMove(
-	    						child.getNodeBoard(), child.getNodeMove().toDirArray()),
-	    				CrushUtilities.getAvailableMoves(child.getNodeBoard()),
+	    				childChildrenBoard,
+	    				CrushUtilities.getAvailableMoves(childChildrenBoard),
 	    				child.getNodeEvaluation()
 	    		);
 	    		
@@ -200,7 +200,7 @@ public class MinMaxPlayer implements AbstractPlayer
 	    		}
 	    	}
 	    	
-	    	curNode.setNodeEvaluation(cMin + curNode.getNodeEvaluation());
+	    	curNode.setNodeEvaluation(curNode.getNodeEvaluation());
 	    	
 	    	return curNode.getNodeEvaluation();
 	    }
@@ -232,10 +232,10 @@ public class MinMaxPlayer implements AbstractPlayer
     }
     
     private double complexHeuristicEvaluation(Board board, PlayerMove move) {
-    	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.5));
+    	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.0));
     	
     	engine.add(new CandiesRemovedHeuristic(move, board), SliderMathModel.VERY_HIGH);
-    	engine.add(new DistanceFromTopHeuristic(move, board), SliderMathModel.VERY_LOW);
+    	//engine.add(new DistanceFromTopHeuristic(move, board), SliderMathModel.VERY_LOW);
     	
     	return engine.evaluate();
     }
