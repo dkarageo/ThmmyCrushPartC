@@ -68,7 +68,7 @@ public class NodeTest {
 	
 	@Test
 	public void testSetNodeBoard() {
-		Board board = new Board();
+		Board board = new Board(10);
 		
 		Node n = new Node();
 		n.setNodeBoard(board);
