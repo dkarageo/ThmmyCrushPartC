@@ -74,7 +74,7 @@ public class CandiesRemovedHeuristicTest {
 	@Test
 	public void testMoveAndBoardArgumentsConstructor() {
 		PlayerMove move = new PlayerMove(
-				noMoveBoard.getTileAt(0, 0), noMoveBoard.getTileAt(0, 1)
+				noMoveBoard.giveTileAt(0, 0), noMoveBoard.giveTileAt(0, 1)
 		); 
 		
 		CandiesRemovedHeuristic heur = new CandiesRemovedHeuristic(move, noMoveBoard);
@@ -94,7 +94,7 @@ public class CandiesRemovedHeuristicTest {
 	@Test
 	public void testSetPlayerMove() {
 		PlayerMove move = new PlayerMove(
-				noMoveBoard.getTileAt(0, 0), noMoveBoard.getTileAt(0, 1)
+				noMoveBoard.giveTileAt(0, 0), noMoveBoard.giveTileAt(0, 1)
 		); 
 		
 		CandiesRemovedHeuristic heur = new CandiesRemovedHeuristic();
@@ -119,20 +119,20 @@ public class CandiesRemovedHeuristicTest {
 		};
 		
 		Board board = createBoard(boardScheme);
-		PlayerMove move = new PlayerMove(board.getTileAt(3, 7), board.getTileAt(4, 7));
+		PlayerMove move = new PlayerMove(board.giveTileAt(3, 7), board.giveTileAt(4, 7));
 		
 		CandiesRemovedHeuristic heur = new CandiesRemovedHeuristic(move, board);
 		Set<Tile> removed = heur.initialCandiesRemoved();
 		
 		assertEquals(8, removed.size());
-		assertTrue(removed.contains(board.getTileAt(3, 7)));
-		assertTrue(removed.contains(board.getTileAt(5, 7)));
-		assertTrue(removed.contains(board.getTileAt(6, 7)));
-		assertTrue(removed.contains(board.getTileAt(4, 8)));
-		assertTrue(removed.contains(board.getTileAt(4, 6)));
-		assertTrue(removed.contains(board.getTileAt(3, 8)));
-		assertTrue(removed.contains(board.getTileAt(4, 7)));
-		assertTrue(removed.contains(board.getTileAt(3, 6)));
+		assertTrue(removed.contains(board.giveTileAt(3, 7)));
+		assertTrue(removed.contains(board.giveTileAt(5, 7)));
+		assertTrue(removed.contains(board.giveTileAt(6, 7)));
+		assertTrue(removed.contains(board.giveTileAt(4, 8)));
+		assertTrue(removed.contains(board.giveTileAt(4, 6)));
+		assertTrue(removed.contains(board.giveTileAt(3, 8)));
+		assertTrue(removed.contains(board.giveTileAt(4, 7)));
+		assertTrue(removed.contains(board.giveTileAt(3, 6)));
 	}
 	
 	@Test
@@ -151,17 +151,17 @@ public class CandiesRemovedHeuristicTest {
 		};
 		
 		Board board = createBoard(boardScheme);
-		PlayerMove move = new PlayerMove(board.getTileAt(3, 7), board.getTileAt(4, 7));
+		PlayerMove move = new PlayerMove(board.giveTileAt(3, 7), board.giveTileAt(4, 7));
 		
 		CandiesRemovedHeuristic heur = new CandiesRemovedHeuristic(move, board);
 		Set<Tile> removed = heur.initialCandiesRemoved();
 		
 		assertEquals(5, removed.size());
-		assertTrue(removed.contains(board.getTileAt(3, 7)));
-		assertTrue(removed.contains(board.getTileAt(5, 7)));
-		assertTrue(removed.contains(board.getTileAt(6, 7)));
-		assertTrue(removed.contains(board.getTileAt(4, 8)));
-		assertTrue(removed.contains(board.getTileAt(4, 6)));
+		assertTrue(removed.contains(board.giveTileAt(3, 7)));
+		assertTrue(removed.contains(board.giveTileAt(5, 7)));
+		assertTrue(removed.contains(board.giveTileAt(6, 7)));
+		assertTrue(removed.contains(board.giveTileAt(4, 8)));
+		assertTrue(removed.contains(board.giveTileAt(4, 6)));
 	}
 	
 	@Test
@@ -188,41 +188,41 @@ public class CandiesRemovedHeuristicTest {
 		// Collumn 0
 		Set<Tile> col0 = heur.findVerticalCrushCandiesWithHoles(board, 0, holes);
 		assertEquals(6, col0.size());
-		assertTrue(col0.contains(board.getTileAt(0, 9)));
-		assertTrue(col0.contains(board.getTileAt(0, 8)));
-		assertTrue(col0.contains(board.getTileAt(0, 7)));
-		assertTrue(col0.contains(board.getTileAt(0, 4)));
-		assertTrue(col0.contains(board.getTileAt(0, 3)));
-		assertTrue(col0.contains(board.getTileAt(0, 2)));
+		assertTrue(col0.contains(board.giveTileAt(0, 9)));
+		assertTrue(col0.contains(board.giveTileAt(0, 8)));
+		assertTrue(col0.contains(board.giveTileAt(0, 7)));
+		assertTrue(col0.contains(board.giveTileAt(0, 4)));
+		assertTrue(col0.contains(board.giveTileAt(0, 3)));
+		assertTrue(col0.contains(board.giveTileAt(0, 2)));
 		
 		// Collumn 2
 		Set<Tile> col2 = heur.findVerticalCrushCandiesWithHoles(board, 2, holes);
 		assertEquals(3, col2.size());
-		assertTrue(col2.contains(board.getTileAt(2, 8)));
-		assertTrue(col2.contains(board.getTileAt(2, 7)));
-		assertTrue(col2.contains(board.getTileAt(2, 6)));
+		assertTrue(col2.contains(board.giveTileAt(2, 8)));
+		assertTrue(col2.contains(board.giveTileAt(2, 7)));
+		assertTrue(col2.contains(board.giveTileAt(2, 6)));
 		
 		// Collumn 5
 		Set<Tile> col5 = heur.findVerticalCrushCandiesWithHoles(board, 5, holes);
 		assertEquals(3, col5.size());
-		assertTrue(col5.contains(board.getTileAt(5, 8)));
-		assertTrue(col5.contains(board.getTileAt(5, 7)));
-		assertTrue(col5.contains(board.getTileAt(5, 6)));		
+		assertTrue(col5.contains(board.giveTileAt(5, 8)));
+		assertTrue(col5.contains(board.giveTileAt(5, 7)));
+		assertTrue(col5.contains(board.giveTileAt(5, 6)));		
 		
 		// Collumn 8
 		Set<Tile> col8 = heur.findVerticalCrushCandiesWithHoles(board, 8, holes);
 		assertEquals(4, col8.size());
-		assertTrue(col8.contains(board.getTileAt(8, 3)));
-		assertTrue(col8.contains(board.getTileAt(8, 2)));
-		assertTrue(col8.contains(board.getTileAt(8, 1)));
-		assertTrue(col8.contains(board.getTileAt(8, 0)));
+		assertTrue(col8.contains(board.giveTileAt(8, 3)));
+		assertTrue(col8.contains(board.giveTileAt(8, 2)));
+		assertTrue(col8.contains(board.giveTileAt(8, 1)));
+		assertTrue(col8.contains(board.giveTileAt(8, 0)));
 		
 		// Collumn 0
 		Set<Tile> col9 = heur.findVerticalCrushCandiesWithHoles(board, 9, holes);
 		assertEquals(3, col9.size());
-		assertTrue(col9.contains(board.getTileAt(9, 6)));
-		assertTrue(col9.contains(board.getTileAt(9, 5)));
-		assertTrue(col9.contains(board.getTileAt(9, 4)));
+		assertTrue(col9.contains(board.giveTileAt(9, 6)));
+		assertTrue(col9.contains(board.giveTileAt(9, 5)));
+		assertTrue(col9.contains(board.giveTileAt(9, 4)));
 	}
 	
 	@Test
@@ -251,16 +251,16 @@ public class CandiesRemovedHeuristicTest {
 		// Collumn 0
 		Set<Tile> col0 = heur.findVerticalCrushCandiesWithHoles(board, 0, holes);
 		assertEquals(3, col0.size());
-		assertTrue(col0.contains(board.getTileAt(0, 4)));
-		assertTrue(col0.contains(board.getTileAt(0, 3)));
-		assertTrue(col0.contains(board.getTileAt(0, 2)));
+		assertTrue(col0.contains(board.giveTileAt(0, 4)));
+		assertTrue(col0.contains(board.giveTileAt(0, 3)));
+		assertTrue(col0.contains(board.giveTileAt(0, 2)));
 		
 		// Collumn 2
 		Set<Tile> col2 = heur.findVerticalCrushCandiesWithHoles(board, 2, holes);
 		assertEquals(3, col2.size());
-		assertTrue(col2.contains(board.getTileAt(2, 8)));
-		assertTrue(col2.contains(board.getTileAt(2, 7)));
-		assertTrue(col2.contains(board.getTileAt(2, 6)));
+		assertTrue(col2.contains(board.giveTileAt(2, 8)));
+		assertTrue(col2.contains(board.giveTileAt(2, 7)));
+		assertTrue(col2.contains(board.giveTileAt(2, 6)));
 		
 		// Collumn 5
 		Set<Tile> col5 = heur.findVerticalCrushCandiesWithHoles(board, 5, holes);
@@ -269,9 +269,9 @@ public class CandiesRemovedHeuristicTest {
 		// Collumn 9
 		Set<Tile> col9 = heur.findVerticalCrushCandiesWithHoles(board, 9, holes);
 		assertEquals(3, col9.size());
-		assertTrue(col9.contains(board.getTileAt(9, 6)));
-		assertTrue(col9.contains(board.getTileAt(9, 5)));
-		assertTrue(col9.contains(board.getTileAt(9, 4)));
+		assertTrue(col9.contains(board.giveTileAt(9, 6)));
+		assertTrue(col9.contains(board.giveTileAt(9, 5)));
+		assertTrue(col9.contains(board.giveTileAt(9, 4)));
 	}
 	
 	@Test
@@ -298,46 +298,46 @@ public class CandiesRemovedHeuristicTest {
 		// Row 9 - 3 Tiles at beginning - 4 Tiles at the end
 		Set<Tile> row9 = heur.findHorizontalCrushCandiesWithHoles(board, 9, holes);
 		assertEquals(7, row9.size());
-		assertTrue(row9.contains(board.getTileAt(0, 9)));
-		assertTrue(row9.contains(board.getTileAt(1, 9)));
-		assertTrue(row9.contains(board.getTileAt(2, 9)));
-		assertTrue(row9.contains(board.getTileAt(6, 9)));
-		assertTrue(row9.contains(board.getTileAt(7, 9)));
-		assertTrue(row9.contains(board.getTileAt(8, 9)));
-		assertTrue(row9.contains(board.getTileAt(9, 9)));
+		assertTrue(row9.contains(board.giveTileAt(0, 9)));
+		assertTrue(row9.contains(board.giveTileAt(1, 9)));
+		assertTrue(row9.contains(board.giveTileAt(2, 9)));
+		assertTrue(row9.contains(board.giveTileAt(6, 9)));
+		assertTrue(row9.contains(board.giveTileAt(7, 9)));
+		assertTrue(row9.contains(board.giveTileAt(8, 9)));
+		assertTrue(row9.contains(board.giveTileAt(9, 9)));
 		
 		// Row 7 - 3 Tiles at the middle
 		Set<Tile> row7 = heur.findHorizontalCrushCandiesWithHoles(board, 7, holes);
 		assertEquals(3, row7.size());
-		assertTrue(row7.contains(board.getTileAt(2, 7)));
-		assertTrue(row7.contains(board.getTileAt(3, 7)));
-		assertTrue(row7.contains(board.getTileAt(4, 7)));
+		assertTrue(row7.contains(board.giveTileAt(2, 7)));
+		assertTrue(row7.contains(board.giveTileAt(3, 7)));
+		assertTrue(row7.contains(board.giveTileAt(4, 7)));
 		
 		// Row 6 - 4 Tiles at the middle
 		Set<Tile> row6 = heur.findHorizontalCrushCandiesWithHoles(board, 6, holes);
 		assertEquals(4, row6.size());
-		assertTrue(row6.contains(board.getTileAt(5, 6)));
-		assertTrue(row6.contains(board.getTileAt(6, 6)));
-		assertTrue(row6.contains(board.getTileAt(7, 6)));
-		assertTrue(row6.contains(board.getTileAt(8, 6)));
+		assertTrue(row6.contains(board.giveTileAt(5, 6)));
+		assertTrue(row6.contains(board.giveTileAt(6, 6)));
+		assertTrue(row6.contains(board.giveTileAt(7, 6)));
+		assertTrue(row6.contains(board.giveTileAt(8, 6)));
 		
 		// Row 3 - 4 Tiles at the middle
 		Set<Tile> row3 = heur.findHorizontalCrushCandiesWithHoles(board, 3, holes);
 		assertEquals(4, row3.size());
-		assertTrue(row3.contains(board.getTileAt(2, 3)));
-		assertTrue(row3.contains(board.getTileAt(3, 3)));
-		assertTrue(row3.contains(board.getTileAt(4, 3)));
-		assertTrue(row3.contains(board.getTileAt(5, 3)));
+		assertTrue(row3.contains(board.giveTileAt(2, 3)));
+		assertTrue(row3.contains(board.giveTileAt(3, 3)));
+		assertTrue(row3.contains(board.giveTileAt(4, 3)));
+		assertTrue(row3.contains(board.giveTileAt(5, 3)));
 		
 		// Row 0 - 3 Tiles at the middle - 3 Tiles at the end
 		Set<Tile> row0 = heur.findHorizontalCrushCandiesWithHoles(board, 0, holes);
 		assertEquals(6, row0.size());
-		assertTrue(row0.contains(board.getTileAt(3, 0)));
-		assertTrue(row0.contains(board.getTileAt(4, 0)));
-		assertTrue(row0.contains(board.getTileAt(5, 0)));
-		assertTrue(row0.contains(board.getTileAt(7, 0)));
-		assertTrue(row0.contains(board.getTileAt(8, 0)));
-		assertTrue(row0.contains(board.getTileAt(9, 0)));
+		assertTrue(row0.contains(board.giveTileAt(3, 0)));
+		assertTrue(row0.contains(board.giveTileAt(4, 0)));
+		assertTrue(row0.contains(board.giveTileAt(5, 0)));
+		assertTrue(row0.contains(board.giveTileAt(7, 0)));
+		assertTrue(row0.contains(board.giveTileAt(8, 0)));
+		assertTrue(row0.contains(board.giveTileAt(9, 0)));
 	}
 	
 	@Test
@@ -367,41 +367,41 @@ public class CandiesRemovedHeuristicTest {
 		// Row 9 - 3 Tiles at beginning with one hole - 4 Tiles at the end with one hole
 		Set<Tile> row9 = heur.findHorizontalCrushCandiesWithHoles(board, 9, holes);
 		assertEquals(3, row9.size());
-		assertTrue(row9.contains(board.getTileAt(6, 9)));
-		assertTrue(row9.contains(board.getTileAt(7, 9)));
-		assertTrue(row9.contains(board.getTileAt(8, 9)));
+		assertTrue(row9.contains(board.giveTileAt(6, 9)));
+		assertTrue(row9.contains(board.giveTileAt(7, 9)));
+		assertTrue(row9.contains(board.giveTileAt(8, 9)));
 		
 		// Row 7 - 3 Tiles at the middle
 		Set<Tile> row7 = heur.findHorizontalCrushCandiesWithHoles(board, 7, holes);
 		assertEquals(3, row7.size());
-		assertTrue(row7.contains(board.getTileAt(2, 7)));
-		assertTrue(row7.contains(board.getTileAt(3, 7)));
-		assertTrue(row7.contains(board.getTileAt(4, 7)));
+		assertTrue(row7.contains(board.giveTileAt(2, 7)));
+		assertTrue(row7.contains(board.giveTileAt(3, 7)));
+		assertTrue(row7.contains(board.giveTileAt(4, 7)));
 		
 		// Row 6 - 4 Tiles at the middle with one hole
 		Set<Tile> row6 = heur.findHorizontalCrushCandiesWithHoles(board, 6, holes);
 		assertEquals(3, row6.size());
-		assertTrue(row6.contains(board.getTileAt(6, 6)));
-		assertTrue(row6.contains(board.getTileAt(7, 6)));
-		assertTrue(row6.contains(board.getTileAt(8, 6)));
+		assertTrue(row6.contains(board.giveTileAt(6, 6)));
+		assertTrue(row6.contains(board.giveTileAt(7, 6)));
+		assertTrue(row6.contains(board.giveTileAt(8, 6)));
 		
 		// Row 3 - 4 Tiles at the middle
 		Set<Tile> row3 = heur.findHorizontalCrushCandiesWithHoles(board, 3, holes);
 		assertEquals(4, row3.size());
-		assertTrue(row3.contains(board.getTileAt(2, 3)));
-		assertTrue(row3.contains(board.getTileAt(3, 3)));
-		assertTrue(row3.contains(board.getTileAt(4, 3)));
-		assertTrue(row3.contains(board.getTileAt(5, 3)));
+		assertTrue(row3.contains(board.giveTileAt(2, 3)));
+		assertTrue(row3.contains(board.giveTileAt(3, 3)));
+		assertTrue(row3.contains(board.giveTileAt(4, 3)));
+		assertTrue(row3.contains(board.giveTileAt(5, 3)));
 		
 		// Row 0 - 3 Tiles at the middle - 3 Tiles at the end
 		Set<Tile> row0 = heur.findHorizontalCrushCandiesWithHoles(board, 0, holes);
 		assertEquals(6, row0.size());
-		assertTrue(row0.contains(board.getTileAt(3, 0)));
-		assertTrue(row0.contains(board.getTileAt(4, 0)));
-		assertTrue(row0.contains(board.getTileAt(5, 0)));
-		assertTrue(row0.contains(board.getTileAt(7, 0)));
-		assertTrue(row0.contains(board.getTileAt(8, 0)));
-		assertTrue(row0.contains(board.getTileAt(9, 0)));
+		assertTrue(row0.contains(board.giveTileAt(3, 0)));
+		assertTrue(row0.contains(board.giveTileAt(4, 0)));
+		assertTrue(row0.contains(board.giveTileAt(5, 0)));
+		assertTrue(row0.contains(board.giveTileAt(7, 0)));
+		assertTrue(row0.contains(board.giveTileAt(8, 0)));
+		assertTrue(row0.contains(board.giveTileAt(9, 0)));
 	}
 	
 	@Test
@@ -426,31 +426,31 @@ public class CandiesRemovedHeuristicTest {
 		
 		Set<Tile> tiles = heurs.findCandiesThatCrushWithHoles(board, holes);
 		assertEquals(25, tiles.size());
-		assertTrue(tiles.contains(board.getTileAt(0, 9)));
-		assertTrue(tiles.contains(board.getTileAt(1, 9)));
-		assertTrue(tiles.contains(board.getTileAt(2, 9)));
-		assertTrue(tiles.contains(board.getTileAt(0, 8)));
-		assertTrue(tiles.contains(board.getTileAt(0, 7)));
-		assertTrue(tiles.contains(board.getTileAt(0, 6)));
-		assertTrue(tiles.contains(board.getTileAt(0, 2)));
-		assertTrue(tiles.contains(board.getTileAt(0, 1)));
-		assertTrue(tiles.contains(board.getTileAt(0, 0)));
-		assertTrue(tiles.contains(board.getTileAt(2, 8)));
-		assertTrue(tiles.contains(board.getTileAt(2, 7)));
-		assertTrue(tiles.contains(board.getTileAt(3, 5)));
-		assertTrue(tiles.contains(board.getTileAt(4, 5)));
-		assertTrue(tiles.contains(board.getTileAt(5, 5)));
-		assertTrue(tiles.contains(board.getTileAt(7, 5)));
-		assertTrue(tiles.contains(board.getTileAt(8, 5)));
-		assertTrue(tiles.contains(board.getTileAt(9, 5)));
-		assertTrue(tiles.contains(board.getTileAt(1, 2)));
-		assertTrue(tiles.contains(board.getTileAt(2, 2)));
-		assertTrue(tiles.contains(board.getTileAt(9, 3)));
-		assertTrue(tiles.contains(board.getTileAt(9, 2)));
-		assertTrue(tiles.contains(board.getTileAt(9, 1)));
-		assertTrue(tiles.contains(board.getTileAt(9, 0)));
-		assertTrue(tiles.contains(board.getTileAt(7, 0)));
-		assertTrue(tiles.contains(board.getTileAt(8, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 9)));
+		assertTrue(tiles.contains(board.giveTileAt(1, 9)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 9)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 8)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 7)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 6)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 1)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 8)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 7)));
+		assertTrue(tiles.contains(board.giveTileAt(3, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(4, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(5, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(7, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(8, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(1, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 3)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 1)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(7, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(8, 0)));
 	}
 	
 	@Test
@@ -478,19 +478,19 @@ public class CandiesRemovedHeuristicTest {
 		
 		Set<Tile> tiles = heurs.findCandiesThatCrushWithHoles(board, holes);
 		assertEquals(13, tiles.size());
-		assertTrue(tiles.contains(board.getTileAt(2, 9)));
-		assertTrue(tiles.contains(board.getTileAt(0, 2)));
-		assertTrue(tiles.contains(board.getTileAt(0, 1)));
-		assertTrue(tiles.contains(board.getTileAt(0, 0)));
-		assertTrue(tiles.contains(board.getTileAt(2, 8)));
-		assertTrue(tiles.contains(board.getTileAt(2, 7)));
-		assertTrue(tiles.contains(board.getTileAt(1, 2)));
-		assertTrue(tiles.contains(board.getTileAt(2, 2)));
-		assertTrue(tiles.contains(board.getTileAt(9, 2)));
-		assertTrue(tiles.contains(board.getTileAt(9, 1)));
-		assertTrue(tiles.contains(board.getTileAt(9, 0)));
-		assertTrue(tiles.contains(board.getTileAt(7, 0)));
-		assertTrue(tiles.contains(board.getTileAt(8, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 9)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 1)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 8)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 7)));
+		assertTrue(tiles.contains(board.giveTileAt(1, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 1)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(7, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(8, 0)));
 	}
 	
 	@Test
@@ -501,23 +501,23 @@ public class CandiesRemovedHeuristicTest {
 		
 		Set<Tile> removed = new HashSet<>();
 		
-		removed.add(noMoveBoard.getTileAt(0, 1));
-		removed.add(noMoveBoard.getTileAt(0, 2));
-		removed.add(noMoveBoard.getTileAt(0, 3));
-		removed.add(noMoveBoard.getTileAt(0, 4));
-		removed.add(noMoveBoard.getTileAt(2, 4));
-		removed.add(noMoveBoard.getTileAt(2, 5));
-		removed.add(noMoveBoard.getTileAt(2, 6));
-		removed.add(noMoveBoard.getTileAt(4, 7));
-		removed.add(noMoveBoard.getTileAt(4, 8));
-		removed.add(noMoveBoard.getTileAt(4, 9));
-		removed.add(noMoveBoard.getTileAt(7, 7));
-		removed.add(noMoveBoard.getTileAt(7, 8));
-		removed.add(noMoveBoard.getTileAt(7, 9));
-		removed.add(noMoveBoard.getTileAt(9, 2));
-		removed.add(noMoveBoard.getTileAt(9, 3));
-		removed.add(noMoveBoard.getTileAt(9, 4));
-		removed.add(noMoveBoard.getTileAt(9, 5));
+		removed.add(noMoveBoard.giveTileAt(0, 1));
+		removed.add(noMoveBoard.giveTileAt(0, 2));
+		removed.add(noMoveBoard.giveTileAt(0, 3));
+		removed.add(noMoveBoard.giveTileAt(0, 4));
+		removed.add(noMoveBoard.giveTileAt(2, 4));
+		removed.add(noMoveBoard.giveTileAt(2, 5));
+		removed.add(noMoveBoard.giveTileAt(2, 6));
+		removed.add(noMoveBoard.giveTileAt(4, 7));
+		removed.add(noMoveBoard.giveTileAt(4, 8));
+		removed.add(noMoveBoard.giveTileAt(4, 9));
+		removed.add(noMoveBoard.giveTileAt(7, 7));
+		removed.add(noMoveBoard.giveTileAt(7, 8));
+		removed.add(noMoveBoard.giveTileAt(7, 9));
+		removed.add(noMoveBoard.giveTileAt(9, 2));
+		removed.add(noMoveBoard.giveTileAt(9, 3));
+		removed.add(noMoveBoard.giveTileAt(9, 4));
+		removed.add(noMoveBoard.giveTileAt(9, 5));
 		
 		heur.updateHoles(removed, holes);
 		
@@ -547,23 +547,23 @@ public class CandiesRemovedHeuristicTest {
 		
 		Set<Tile> removed = new HashSet<>();
 		
-		removed.add(noMoveBoard.getTileAt(0, 1));
-		removed.add(noMoveBoard.getTileAt(0, 2));
-		removed.add(noMoveBoard.getTileAt(0, 3));
-		removed.add(noMoveBoard.getTileAt(0, 4));
-		removed.add(noMoveBoard.getTileAt(2, 4));
-		removed.add(noMoveBoard.getTileAt(2, 5));
-		removed.add(noMoveBoard.getTileAt(2, 6));
-		removed.add(noMoveBoard.getTileAt(4, 7));
-		removed.add(noMoveBoard.getTileAt(4, 8));
-		removed.add(noMoveBoard.getTileAt(4, 9));
-		removed.add(noMoveBoard.getTileAt(7, 7));
-		removed.add(noMoveBoard.getTileAt(7, 8));
-		removed.add(noMoveBoard.getTileAt(7, 9));
-		removed.add(noMoveBoard.getTileAt(9, 2));
-		removed.add(noMoveBoard.getTileAt(9, 3));
-		removed.add(noMoveBoard.getTileAt(9, 4));
-		removed.add(noMoveBoard.getTileAt(9, 5));
+		removed.add(noMoveBoard.giveTileAt(0, 1));
+		removed.add(noMoveBoard.giveTileAt(0, 2));
+		removed.add(noMoveBoard.giveTileAt(0, 3));
+		removed.add(noMoveBoard.giveTileAt(0, 4));
+		removed.add(noMoveBoard.giveTileAt(2, 4));
+		removed.add(noMoveBoard.giveTileAt(2, 5));
+		removed.add(noMoveBoard.giveTileAt(2, 6));
+		removed.add(noMoveBoard.giveTileAt(4, 7));
+		removed.add(noMoveBoard.giveTileAt(4, 8));
+		removed.add(noMoveBoard.giveTileAt(4, 9));
+		removed.add(noMoveBoard.giveTileAt(7, 7));
+		removed.add(noMoveBoard.giveTileAt(7, 8));
+		removed.add(noMoveBoard.giveTileAt(7, 9));
+		removed.add(noMoveBoard.giveTileAt(9, 2));
+		removed.add(noMoveBoard.giveTileAt(9, 3));
+		removed.add(noMoveBoard.giveTileAt(9, 4));
+		removed.add(noMoveBoard.giveTileAt(9, 5));
 		
 		heur.updateHoles(removed, holes);
 		
@@ -601,7 +601,7 @@ public class CandiesRemovedHeuristicTest {
 		};
 		
 		Board board = createBoard(boardScheme);
-		PlayerMove move = new PlayerMove(board.getTileAt(5, 8), board.getTileAt(6, 8));
+		PlayerMove move = new PlayerMove(board.giveTileAt(5, 8), board.giveTileAt(6, 8));
 		
 		CandiesRemovedHeuristic heur = new CandiesRemovedHeuristic(move, board);
 		
@@ -609,12 +609,12 @@ public class CandiesRemovedHeuristicTest {
 		
 		// Test that removed set is the expected one.
 		assertEquals(3, removed.size());
-		assertTrue(removed.contains(board.getTileAt(3, 8)));
-		assertTrue(removed.contains(board.getTileAt(4, 8)));
-		assertTrue(removed.contains(board.getTileAt(6, 8)));
+		assertTrue(removed.contains(board.giveTileAt(3, 8)));
+		assertTrue(removed.contains(board.giveTileAt(4, 8)));
+		assertTrue(removed.contains(board.giveTileAt(6, 8)));
 		
-		removed.remove(board.getTileAt(6, 8));
-		removed.add(board.getTileAt(5, 8));
+		removed.remove(board.giveTileAt(6, 8));
+		removed.add(board.giveTileAt(5, 8));
 		
 		Map<Integer, Integer> holes = new HashMap<>();
 		
@@ -641,7 +641,7 @@ public class CandiesRemovedHeuristicTest {
 		};
 		
 		Board board = createBoard(boardScheme);
-		PlayerMove move = new PlayerMove(board.getTileAt(5, 7), board.getTileAt(6, 7));
+		PlayerMove move = new PlayerMove(board.giveTileAt(5, 7), board.giveTileAt(6, 7));
 		
 		CandiesRemovedHeuristic heur = new CandiesRemovedHeuristic(move, board);
 		
@@ -649,12 +649,12 @@ public class CandiesRemovedHeuristicTest {
 		
 		// Test that removed set is the expected one.
 		assertEquals(3, removed.size());
-		assertTrue(removed.contains(board.getTileAt(3, 7)));
-		assertTrue(removed.contains(board.getTileAt(4, 7)));
-		assertTrue(removed.contains(board.getTileAt(6, 7)));
+		assertTrue(removed.contains(board.giveTileAt(3, 7)));
+		assertTrue(removed.contains(board.giveTileAt(4, 7)));
+		assertTrue(removed.contains(board.giveTileAt(6, 7)));
 		
-		removed.remove(board.getTileAt(6, 7));
-		removed.add(board.getTileAt(5, 7));
+		removed.remove(board.giveTileAt(6, 7));
+		removed.add(board.giveTileAt(5, 7));
 		
 		Map<Integer, Integer> holes = new HashMap<>();
 		
@@ -681,7 +681,7 @@ public class CandiesRemovedHeuristicTest {
 		};
 		
 		Board board = createBoard(boardScheme);
-		PlayerMove move = new PlayerMove(board.getTileAt(5, 7), board.getTileAt(6, 7));
+		PlayerMove move = new PlayerMove(board.giveTileAt(5, 7), board.giveTileAt(6, 7));
 		
 		CandiesRemovedHeuristic heur = new CandiesRemovedHeuristic(move, board);
 		
@@ -689,12 +689,12 @@ public class CandiesRemovedHeuristicTest {
 		
 		// Test that removed set is the expected one.
 		assertEquals(3, removed.size());
-		assertTrue(removed.contains(board.getTileAt(3, 7)));
-		assertTrue(removed.contains(board.getTileAt(4, 7)));
-		assertTrue(removed.contains(board.getTileAt(6, 7)));
+		assertTrue(removed.contains(board.giveTileAt(3, 7)));
+		assertTrue(removed.contains(board.giveTileAt(4, 7)));
+		assertTrue(removed.contains(board.giveTileAt(6, 7)));
 		
-		removed.remove(board.getTileAt(6, 7));
-		removed.add(board.getTileAt(5, 7));
+		removed.remove(board.giveTileAt(6, 7));
+		removed.add(board.giveTileAt(5, 7));
 		
 		Map<Integer, Integer> holes = new HashMap<>();
 		
@@ -721,7 +721,7 @@ public class CandiesRemovedHeuristicTest {
 		};
 		
 		Board board = createBoard(boardScheme);
-		PlayerMove move = new PlayerMove(board.getTileAt(5, 8), board.getTileAt(6, 8));
+		PlayerMove move = new PlayerMove(board.giveTileAt(5, 8), board.giveTileAt(6, 8));
 		
 		CandiesRemovedHeuristic heur = new CandiesRemovedHeuristic(move, board);
 		
@@ -746,7 +746,7 @@ public class CandiesRemovedHeuristicTest {
 		};
 		
 		Board board = createBoard(boardScheme);
-		PlayerMove move = new PlayerMove(board.getTileAt(5, 7), board.getTileAt(6, 7));
+		PlayerMove move = new PlayerMove(board.giveTileAt(5, 7), board.giveTileAt(6, 7));
 		
 		CandiesRemovedHeuristic heur = new CandiesRemovedHeuristic(move, board);
 		
@@ -771,7 +771,7 @@ public class CandiesRemovedHeuristicTest {
 		};
 		
 		Board board = createBoard(boardScheme);
-		PlayerMove move = new PlayerMove(board.getTileAt(5, 7), board.getTileAt(6, 7));
+		PlayerMove move = new PlayerMove(board.giveTileAt(5, 7), board.giveTileAt(6, 7));
 		
 		CandiesRemovedHeuristic heur = new CandiesRemovedHeuristic(move, board);
 		

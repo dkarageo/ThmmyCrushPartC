@@ -213,8 +213,8 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		// Get the tiles that exist at cords specified by move on copied board, 
 		// after the move has taken place.
 		Tile[] afterMoveTiles = {
-				boardJustBeforeCrush.getTileAt(move.getX1(), move.getY1()),
-				boardJustBeforeCrush.getTileAt(move.getX2(), move.getY2())
+				boardJustBeforeCrush.giveTileAt(move.getX1(), move.getY1()),
+				boardJustBeforeCrush.giveTileAt(move.getX2(), move.getY2())
 		};
 		
 		for (Tile t : afterMoveTiles) {
@@ -253,7 +253,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		
 		// Match the tiles to the ones on the real board.
 		for (Tile t : tilesForRemoval) {
-			removedOnActualBoard.add(board.getTileAt(t.getX(), t.getY()));
+			removedOnActualBoard.add(board.giveTileAt(t.getX(), t.getY()));
 		}
 		
 		return removedOnActualBoard;
@@ -408,7 +408,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 												// asserted row here.
 		
 		for(int y = 0; y <= max_y; y++) {
-			Tile current = board.getTileAt(column, y);
+			Tile current = board.giveTileAt(column, y);
 			
 			if (previous != null) { // null means current is the first tile.
 				
@@ -460,7 +460,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		Tile previous = null;
 		
 		for(int x = 0; x < board.getCols(); x++) {
-			Tile current = board.getTileAt(x, row);
+			Tile current = board.giveTileAt(x, row);
 			
 			// Get the number of holes at the top of current column.
 			int currentHoles = 0;
@@ -515,13 +515,13 @@ public class CandiesRemovedHeuristic extends Heuristic {
 //		for(Integer i : holes.keySet()) {
 //			// Search for a horizontal move
 //			if (holes.containsKey(i + 1)) {
-//				move.setTiles(currentBoard.getTileAt(i, 0), currentBoard.getTileAt(i + 1, 0));
+//				move.setTiles(currentBoard.giveTileAt(i, 0), currentBoard.giveTileAt(i + 1, 0));
 //				break;
 //			}
 //			
 //			// Search for a vertical move
 //			if (holes.get(i) >= 2) {
-//				move.setTiles(currentBoard.getTileAt(i, 0), currentBoard.getTileAt(i, 1));
+//				move.setTiles(currentBoard.giveTileAt(i, 0), currentBoard.giveTileAt(i, 1));
 //				break;
 //			}
 //		}

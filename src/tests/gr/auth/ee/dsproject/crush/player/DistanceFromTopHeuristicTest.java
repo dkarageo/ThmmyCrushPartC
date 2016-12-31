@@ -65,8 +65,8 @@ public class DistanceFromTopHeuristicTest {
 
 	@Test
 	public void testMoveAndBoardArgumentsConstructorWithValidArgs() {
-		PlayerMove move = new PlayerMove(noMoveBoard.getTileAt(3, 3),
-									     noMoveBoard.getTileAt(3, 4));
+		PlayerMove move = new PlayerMove(noMoveBoard.giveTileAt(3, 3),
+									     noMoveBoard.giveTileAt(3, 4));
 		
 		DistanceFromTopHeuristic heur = new DistanceFromTopHeuristic(move, noMoveBoard);
 		
@@ -76,8 +76,8 @@ public class DistanceFromTopHeuristicTest {
 	
 	@Test
 	public void testEvaluateWithHorizontalMove1() {
-		PlayerMove move = new PlayerMove(noMoveBoard.getTileAt(3, 9),
-			     						 noMoveBoard.getTileAt(4, 9));
+		PlayerMove move = new PlayerMove(noMoveBoard.giveTileAt(3, 9),
+			     						 noMoveBoard.giveTileAt(4, 9));
 
 		DistanceFromTopHeuristic heur = new DistanceFromTopHeuristic(move, noMoveBoard);
 		
@@ -86,8 +86,8 @@ public class DistanceFromTopHeuristicTest {
 	
 	@Test
 	public void testEvaluateWithHorizontalMove2() {
-		PlayerMove move = new PlayerMove(noMoveBoard.getTileAt(3, 6),
-			     						 noMoveBoard.getTileAt(4, 6));
+		PlayerMove move = new PlayerMove(noMoveBoard.giveTileAt(3, 6),
+			     						 noMoveBoard.giveTileAt(4, 6));
 
 		DistanceFromTopHeuristic heur = new DistanceFromTopHeuristic(move, noMoveBoard);
 		
@@ -96,8 +96,8 @@ public class DistanceFromTopHeuristicTest {
 	
 	@Test
 	public void testEvaluateWithHorizontalMove3() {
-		PlayerMove move = new PlayerMove(noMoveBoard.getTileAt(3, 0),
-			     						 noMoveBoard.getTileAt(4, 0));
+		PlayerMove move = new PlayerMove(noMoveBoard.giveTileAt(3, 0),
+			     						 noMoveBoard.giveTileAt(4, 0));
 
 		DistanceFromTopHeuristic heur = new DistanceFromTopHeuristic(move, noMoveBoard);
 		
@@ -106,8 +106,8 @@ public class DistanceFromTopHeuristicTest {
 	
 	@Test
 	public void testEvaluateWithVerticalMove1() {
-		PlayerMove move = new PlayerMove(noMoveBoard.getTileAt(1, 9),
-			     						 noMoveBoard.getTileAt(1, 8));
+		PlayerMove move = new PlayerMove(noMoveBoard.giveTileAt(1, 9),
+			     						 noMoveBoard.giveTileAt(1, 8));
 
 		DistanceFromTopHeuristic heur = new DistanceFromTopHeuristic(move, noMoveBoard);
 		
@@ -116,8 +116,8 @@ public class DistanceFromTopHeuristicTest {
 	
 	@Test
 	public void testEvaluateWithVerticalMove2() {
-		PlayerMove move = new PlayerMove(noMoveBoard.getTileAt(3, 6),
-			     						 noMoveBoard.getTileAt(3, 5));
+		PlayerMove move = new PlayerMove(noMoveBoard.giveTileAt(3, 6),
+			     						 noMoveBoard.giveTileAt(3, 5));
 
 		DistanceFromTopHeuristic heur = new DistanceFromTopHeuristic(move, noMoveBoard);
 		
@@ -126,8 +126,8 @@ public class DistanceFromTopHeuristicTest {
 	
 	@Test
 	public void testEvaluateWithVerticalMove3() {
-		PlayerMove move = new PlayerMove(noMoveBoard.getTileAt(3, 1),
-			     						 noMoveBoard.getTileAt(3, 0));
+		PlayerMove move = new PlayerMove(noMoveBoard.giveTileAt(3, 1),
+			     						 noMoveBoard.giveTileAt(3, 0));
 
 		DistanceFromTopHeuristic heur = new DistanceFromTopHeuristic(move, noMoveBoard);
 		

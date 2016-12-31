@@ -106,8 +106,8 @@ public class HeuristicPlayer implements AbstractPlayer
 	  	  
 	    int[] dirMove = CrushUtilities.calculateNextMove(move);
 	    
-	    Tile tile1 = board.getTileAt(dirMove[0], dirMove[1]);
-	    Tile tile2 = board.getTileAt(dirMove[2], dirMove[3]);
+	    Tile tile1 = board.giveTileAt(dirMove[0], dirMove[1]);
+	    Tile tile2 = board.giveTileAt(dirMove[2], dirMove[3]);
 	    PlayerMove pMove = new PlayerMove(tile1, tile2);
 	  
 	    engine.add(new CandiesRemovedHeuristic(pMove, board), SliderMathModel.VERY_HIGH);

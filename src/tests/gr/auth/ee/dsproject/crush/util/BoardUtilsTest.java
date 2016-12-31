@@ -74,7 +74,7 @@ public class BoardUtilsTest {
 		boolean ex = false;
 		
 		try {
-			BoardUtils.findInDirectionSameColorTiles(null, noMoveBoard.getTileAt(0, 0), CrushUtilities.UP, 3);
+			BoardUtils.findInDirectionSameColorTiles(null, noMoveBoard.giveTileAt(0, 0), CrushUtilities.UP, 3);
 		} catch (BoardUtils.NullBoardRuntimeException e) {
 			ex = true;
 		}
@@ -100,7 +100,7 @@ public class BoardUtilsTest {
 		boolean ex = false;
 		
 		try {
-			BoardUtils.findInDirectionSameColorTiles(noMoveBoard, noMoveBoard.getTileAt(0, 0), 1821, 3);
+			BoardUtils.findInDirectionSameColorTiles(noMoveBoard, noMoveBoard.giveTileAt(0, 0), 1821, 3);
 		} catch (BoardUtils.InvalidDirectionsRuntimeException e) {
 			ex = true;
 		}
@@ -125,24 +125,24 @@ public class BoardUtilsTest {
 		
 		Board board = createBoard(scheme);
 				
-		Set<Tile> toLeft = BoardUtils.findInDirectionSameColorTiles(board, board.getTileAt(4, 7), CrushUtilities.LEFT, 3);
+		Set<Tile> toLeft = BoardUtils.findInDirectionSameColorTiles(board, board.giveTileAt(4, 7), CrushUtilities.LEFT, 3);
 		assertEquals(2, toLeft.size());
-		assertTrue(toLeft.contains(board.getTileAt(3, 7)));
-		assertTrue(toLeft.contains(board.getTileAt(2, 7)));
+		assertTrue(toLeft.contains(board.giveTileAt(3, 7)));
+		assertTrue(toLeft.contains(board.giveTileAt(2, 7)));
 		
-		Set<Tile> toRight = BoardUtils.findInDirectionSameColorTiles(board, board.getTileAt(4, 7), CrushUtilities.RIGHT, 3);
+		Set<Tile> toRight = BoardUtils.findInDirectionSameColorTiles(board, board.giveTileAt(4, 7), CrushUtilities.RIGHT, 3);
 		assertEquals(1, toRight.size());
-		assertTrue(toRight.contains(board.getTileAt(5, 7)));
+		assertTrue(toRight.contains(board.giveTileAt(5, 7)));
 		
-		Set<Tile> toDown = BoardUtils.findInDirectionSameColorTiles(board, board.getTileAt(4, 7), CrushUtilities.UP, 3);
+		Set<Tile> toDown = BoardUtils.findInDirectionSameColorTiles(board, board.giveTileAt(4, 7), CrushUtilities.UP, 3);
 		
 		assertEquals(1, toDown.size());
-		assertTrue(toDown.contains(board.getTileAt(4, 8)));
+		assertTrue(toDown.contains(board.giveTileAt(4, 8)));
 		
-		Set<Tile> toUp = BoardUtils.findInDirectionSameColorTiles(board, board.getTileAt(4, 7), CrushUtilities.DOWN, 3);
+		Set<Tile> toUp = BoardUtils.findInDirectionSameColorTiles(board, board.giveTileAt(4, 7), CrushUtilities.DOWN, 3);
 		assertEquals(2, toUp.size());
-		assertTrue(toUp.contains(board.getTileAt(4, 6)));
-		assertTrue(toUp.contains(board.getTileAt(4, 5)));
+		assertTrue(toUp.contains(board.giveTileAt(4, 6)));
+		assertTrue(toUp.contains(board.giveTileAt(4, 5)));
 	}
 	
 	@Test
@@ -150,7 +150,7 @@ public class BoardUtilsTest {
 		boolean ex = false;
 		
 		try {
-			BoardUtils.findAdjacentSameColorTiles(null, noMoveBoard.getTileAt(0, 0), 10);
+			BoardUtils.findAdjacentSameColorTiles(null, noMoveBoard.giveTileAt(0, 0), 10);
 		} catch (BoardUtils.NullBoardRuntimeException e) {
 			ex = true;
 		}
@@ -188,14 +188,14 @@ public class BoardUtilsTest {
 		
 		Board board = createBoard(scheme);
 		
-		Set<Tile> tiles = BoardUtils.findAdjacentSameColorTiles(board, board.getTileAt(4, 7), 5);
+		Set<Tile> tiles = BoardUtils.findAdjacentSameColorTiles(board, board.giveTileAt(4, 7), 5);
 		
 		assertEquals(5, tiles.size());
-		assertTrue(tiles.contains(board.getTileAt(2, 7)));
-		assertTrue(tiles.contains(board.getTileAt(3, 7)));
-		assertTrue(tiles.contains(board.getTileAt(5, 7)));
-		assertTrue(tiles.contains(board.getTileAt(4, 8)));
-		assertTrue(tiles.contains(board.getTileAt(4, 6)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 7)));
+		assertTrue(tiles.contains(board.giveTileAt(3, 7)));
+		assertTrue(tiles.contains(board.giveTileAt(5, 7)));
+		assertTrue(tiles.contains(board.giveTileAt(4, 8)));
+		assertTrue(tiles.contains(board.giveTileAt(4, 6)));
 	}
 	
 	@Test
@@ -215,15 +215,15 @@ public class BoardUtilsTest {
 		
 		Board board = createBoard(scheme);
 		
-		Set<Tile> tiles = BoardUtils.findAdjacentSameColorTiles(board, board.getTileAt(4, 7), 5);
+		Set<Tile> tiles = BoardUtils.findAdjacentSameColorTiles(board, board.giveTileAt(4, 7), 5);
 		
 		assertEquals(6, tiles.size());
-		assertTrue(tiles.contains(board.getTileAt(4, 8)));
-		assertTrue(tiles.contains(board.getTileAt(4, 9)));
-		assertTrue(tiles.contains(board.getTileAt(4, 6)));
-		assertTrue(tiles.contains(board.getTileAt(4, 5)));
-		assertTrue(tiles.contains(board.getTileAt(5, 7)));
-		assertTrue(tiles.contains(board.getTileAt(6, 7)));
+		assertTrue(tiles.contains(board.giveTileAt(4, 8)));
+		assertTrue(tiles.contains(board.giveTileAt(4, 9)));
+		assertTrue(tiles.contains(board.giveTileAt(4, 6)));
+		assertTrue(tiles.contains(board.giveTileAt(4, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(5, 7)));
+		assertTrue(tiles.contains(board.giveTileAt(6, 7)));
 	}
 	
 	@Test
@@ -245,36 +245,36 @@ public class BoardUtilsTest {
 		
 		Set<Tile> allAdjacent = new HashSet<>(); 
 		
-		allAdjacent.addAll(BoardUtils.findAdjacentSameColorTiles(board, board.getTileAt(3, 7), 2));
-		allAdjacent.addAll(BoardUtils.findAdjacentSameColorTiles(board, board.getTileAt(4, 7), 2));
-		allAdjacent.add(board.getTileAt(3, 7));
-		allAdjacent.add(board.getTileAt(4, 7));
+		allAdjacent.addAll(BoardUtils.findAdjacentSameColorTiles(board, board.giveTileAt(3, 7), 2));
+		allAdjacent.addAll(BoardUtils.findAdjacentSameColorTiles(board, board.giveTileAt(4, 7), 2));
+		allAdjacent.add(board.giveTileAt(3, 7));
+		allAdjacent.add(board.giveTileAt(4, 7));
 		
 		// Assertions to test that the initial set is correct.
 		assertEquals(10, allAdjacent.size());
-		assertTrue(allAdjacent.contains(board.getTileAt(4, 9)));
-		assertTrue(allAdjacent.contains(board.getTileAt(4, 8)));
-		assertTrue(allAdjacent.contains(board.getTileAt(4, 7)));
-		assertTrue(allAdjacent.contains(board.getTileAt(4, 6)));
-		assertTrue(allAdjacent.contains(board.getTileAt(4, 5)));
-		assertTrue(allAdjacent.contains(board.getTileAt(5, 7)));
-		assertTrue(allAdjacent.contains(board.getTileAt(3, 7)));
-		assertTrue(allAdjacent.contains(board.getTileAt(2, 7)));
-		assertTrue(allAdjacent.contains(board.getTileAt(1, 7)));
-		assertTrue(allAdjacent.contains(board.getTileAt(3, 8)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 9)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 8)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 6)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 5)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(5, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(3, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(2, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(1, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(3, 8)));
 		
 		// Now test the findTIlesThatCrushMethod.
 		Set<Tile> crushTiles = BoardUtils.findTilesThatCrush(allAdjacent);
 		
 		assertEquals(8, crushTiles.size());
-		assertTrue(crushTiles.contains(board.getTileAt(4, 9)));
-		assertTrue(crushTiles.contains(board.getTileAt(4, 8)));
-		assertTrue(crushTiles.contains(board.getTileAt(4, 7)));
-		assertTrue(crushTiles.contains(board.getTileAt(4, 6)));
-		assertTrue(crushTiles.contains(board.getTileAt(4, 5)));
-		assertTrue(crushTiles.contains(board.getTileAt(3, 7)));
-		assertTrue(crushTiles.contains(board.getTileAt(2, 7)));
-		assertTrue(crushTiles.contains(board.getTileAt(1, 7)));
+		assertTrue(crushTiles.contains(board.giveTileAt(4, 9)));
+		assertTrue(crushTiles.contains(board.giveTileAt(4, 8)));
+		assertTrue(crushTiles.contains(board.giveTileAt(4, 7)));
+		assertTrue(crushTiles.contains(board.giveTileAt(4, 6)));
+		assertTrue(crushTiles.contains(board.giveTileAt(4, 5)));
+		assertTrue(crushTiles.contains(board.giveTileAt(3, 7)));
+		assertTrue(crushTiles.contains(board.giveTileAt(2, 7)));
+		assertTrue(crushTiles.contains(board.giveTileAt(1, 7)));
 	}
 	
 	@Test
@@ -296,19 +296,19 @@ public class BoardUtilsTest {
 		
 		Set<Tile> allAdjacent = new HashSet<>(); 
 		
-		allAdjacent.addAll(BoardUtils.findAdjacentSameColorTiles(board, board.getTileAt(3, 7), 2));
-		allAdjacent.addAll(BoardUtils.findAdjacentSameColorTiles(board, board.getTileAt(4, 7), 2));
-		allAdjacent.add(board.getTileAt(3, 7));
-		allAdjacent.add(board.getTileAt(4, 7));
+		allAdjacent.addAll(BoardUtils.findAdjacentSameColorTiles(board, board.giveTileAt(3, 7), 2));
+		allAdjacent.addAll(BoardUtils.findAdjacentSameColorTiles(board, board.giveTileAt(4, 7), 2));
+		allAdjacent.add(board.giveTileAt(3, 7));
+		allAdjacent.add(board.giveTileAt(4, 7));
 		
 		// Assertions to test that the initial set is correct.
 		assertEquals(6, allAdjacent.size());
-		assertTrue(allAdjacent.contains(board.getTileAt(4, 7)));
-		assertTrue(allAdjacent.contains(board.getTileAt(4, 6)));
-		assertTrue(allAdjacent.contains(board.getTileAt(5, 7)));
-		assertTrue(allAdjacent.contains(board.getTileAt(3, 7)));
-		assertTrue(allAdjacent.contains(board.getTileAt(2, 7)));
-		assertTrue(allAdjacent.contains(board.getTileAt(3, 8)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 6)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(5, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(3, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(2, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(3, 8)));
 		
 		// Now test the findTIlesThatCrushMethod.
 		Set<Tile> crushTiles = BoardUtils.findTilesThatCrush(allAdjacent);
@@ -366,9 +366,9 @@ public class BoardUtilsTest {
 //		
 //		for(int y = 0; y < noMoveBoard.getCols(); y++){
 //			for(int x = 0; x < noMoveBoard.getWidth(); x++) {
-//				assertEquals(noMoveBoard.getTileAt(x, y).getX(), noMoveBoardCopy.getTileAt(x, y).getX());
-//				assertEquals(noMoveBoard.getTileAt(x, y).getY(), noMoveBoardCopy.getTileAt(x, y).getY());
-//				assertTrue(noMoveBoard.getTileAt(x, y).equals(noMoveBoardCopy.getTileAt(x, y)));
+//				assertEquals(noMoveBoard.giveTileAt(x, y).getX(), noMoveBoardCopy.giveTileAt(x, y).getX());
+//				assertEquals(noMoveBoard.giveTileAt(x, y).getY(), noMoveBoardCopy.giveTileAt(x, y).getY());
+//				assertTrue(noMoveBoard.giveTileAt(x, y).equals(noMoveBoardCopy.giveTileAt(x, y)));
 //			}
 //		}
 //	}
@@ -388,8 +388,8 @@ public class BoardUtilsTest {
 //	
 //	@Test
 //	public void testDoMoveNullBoardException() {
-//		PlayerMove move = new PlayerMove(noMoveBoard.getTileAt(0, 0), 
-//										 noMoveBoard.getTileAt(1, 0));
+//		PlayerMove move = new PlayerMove(noMoveBoard.giveTileAt(0, 0), 
+//										 noMoveBoard.giveTileAt(1, 0));
 //		
 //		boolean ex = false;
 //		
@@ -406,19 +406,19 @@ public class BoardUtilsTest {
 //	public void testDoMoveVertically() {
 //		Board noMoveBoardCopy = BoardUtils.boardCopy(noMoveBoard);
 //		
-//		PlayerMove move = new PlayerMove(noMoveBoardCopy.getTileAt(2, 2), 
-//				 						 noMoveBoardCopy.getTileAt(2, 3));
+//		PlayerMove move = new PlayerMove(noMoveBoardCopy.giveTileAt(2, 2), 
+//				 						 noMoveBoardCopy.giveTileAt(2, 3));
 //		
 //		noMoveBoardCopy = BoardUtils.doMove(noMoveBoardCopy, move);
 //		
-//		assertEquals(2, noMoveBoardCopy.getTileAt(2, 2).getX());
-//		assertEquals(2, noMoveBoardCopy.getTileAt(2, 2).getY());
+//		assertEquals(2, noMoveBoardCopy.giveTileAt(2, 2).getX());
+//		assertEquals(2, noMoveBoardCopy.giveTileAt(2, 2).getY());
 //		
-//		assertEquals(2, noMoveBoardCopy.getTileAt(2, 3).getX());
-//		assertEquals(3, noMoveBoardCopy.getTileAt(2, 3).getY());
+//		assertEquals(2, noMoveBoardCopy.giveTileAt(2, 3).getX());
+//		assertEquals(3, noMoveBoardCopy.giveTileAt(2, 3).getY());
 //		
-//		assertEquals(noMoveBoard.getTileAt(2, 2).getColor(), noMoveBoardCopy.getTileAt(2, 3).getColor());
-//		assertEquals(noMoveBoard.getTileAt(2, 3).getColor(), noMoveBoardCopy.getTileAt(2, 2).getColor());
+//		assertEquals(noMoveBoard.giveTileAt(2, 2).getColor(), noMoveBoardCopy.giveTileAt(2, 3).getColor());
+//		assertEquals(noMoveBoard.giveTileAt(2, 3).getColor(), noMoveBoardCopy.giveTileAt(2, 2).getColor());
 //	}
 //	
 //	@Test
@@ -439,20 +439,20 @@ public class BoardUtilsTest {
 //		Board board = createBoard(boardScheme);
 //		
 //		Board afterMoveBoard = BoardUtils.getBoardAfterMoveAndCrush(
-//				board, new PlayerMove(board.getTileAt(3, 1), board.getTileAt(4, 1)));
+//				board, new PlayerMove(board.giveTileAt(3, 1), board.giveTileAt(4, 1)));
 //		
 //		/*
 //		for (int y = 0; y < afterMoveBoard.getRows(); y++) {
 //			for (int x = 0; x < afterMoveBoard.getCols(); x++) {
-//				System.out.print(afterMoveBoard.getTileAt(x, y).getColor() + " ");
+//				System.out.print(afterMoveBoard.giveTileAt(x, y).getColor() + " ");
 //			}
 //			System.out.print("\n");
 //		}
 //		*/
 //		
-//		assertEquals(4, afterMoveBoard.getTileAt(4, 1).getColor());
-//		assertEquals(5, afterMoveBoard.getTileAt(5, 1).getColor());
-//		assertEquals(6, afterMoveBoard.getTileAt(6, 1).getColor());
+//		assertEquals(4, afterMoveBoard.giveTileAt(4, 1).getColor());
+//		assertEquals(5, afterMoveBoard.giveTileAt(5, 1).getColor());
+//		assertEquals(6, afterMoveBoard.giveTileAt(6, 1).getColor());
 //	}
 //	
 //	@Test
@@ -473,29 +473,29 @@ public class BoardUtilsTest {
 //		Board board = createBoard(boardScheme);
 //		
 //		Board afterMoveBoard = BoardUtils.getBoardAfterMoveAndCrush(
-//				board, new PlayerMove(board.getTileAt(3, 1), board.getTileAt(4, 1)));
+//				board, new PlayerMove(board.giveTileAt(3, 1), board.giveTileAt(4, 1)));
 //		
 //		/*
 //		for (int y = 0; y < afterMoveBoard.getRows(); y++) {
 //			for (int x = 0; x < afterMoveBoard.getCols(); x++) {
-//				System.out.print(afterMoveBoard.getTileAt(x, y).getColor() + " ");
+//				System.out.print(afterMoveBoard.giveTileAt(x, y).getColor() + " ");
 //			}
 //			System.out.print("\n");
 //		}
 //		*/
 //				
-//		assertEquals(4, afterMoveBoard.getTileAt(4, 1).getColor());
-//		assertEquals(5, afterMoveBoard.getTileAt(5, 1).getColor());
-//		assertEquals(6, afterMoveBoard.getTileAt(6, 2).getColor());
-//		assertEquals(6, afterMoveBoard.getTileAt(6, 7).getColor());
-//		assertEquals(0, afterMoveBoard.getTileAt(7, 7).getColor());
-//		assertEquals(1, afterMoveBoard.getTileAt(8, 7).getColor());
-//		assertEquals(0, afterMoveBoard.getTileAt(6, 8).getColor());
-//		assertEquals(1, afterMoveBoard.getTileAt(7, 8).getColor());
-//		assertEquals(2, afterMoveBoard.getTileAt(8, 8).getColor());
-//		assertEquals(1, afterMoveBoard.getTileAt(6, 9).getColor());
-//		assertEquals(2, afterMoveBoard.getTileAt(7, 9).getColor());
-//		assertEquals(3, afterMoveBoard.getTileAt(8, 9).getColor());
+//		assertEquals(4, afterMoveBoard.giveTileAt(4, 1).getColor());
+//		assertEquals(5, afterMoveBoard.giveTileAt(5, 1).getColor());
+//		assertEquals(6, afterMoveBoard.giveTileAt(6, 2).getColor());
+//		assertEquals(6, afterMoveBoard.giveTileAt(6, 7).getColor());
+//		assertEquals(0, afterMoveBoard.giveTileAt(7, 7).getColor());
+//		assertEquals(1, afterMoveBoard.giveTileAt(8, 7).getColor());
+//		assertEquals(0, afterMoveBoard.giveTileAt(6, 8).getColor());
+//		assertEquals(1, afterMoveBoard.giveTileAt(7, 8).getColor());
+//		assertEquals(2, afterMoveBoard.giveTileAt(8, 8).getColor());
+//		assertEquals(1, afterMoveBoard.giveTileAt(6, 9).getColor());
+//		assertEquals(2, afterMoveBoard.giveTileAt(7, 9).getColor());
+//		assertEquals(3, afterMoveBoard.giveTileAt(8, 9).getColor());
 //	}
 //	
 //	@Test
@@ -516,31 +516,31 @@ public class BoardUtilsTest {
 //		Board board = createBoard(boardScheme);
 //		
 //		Board afterMoveBoard = BoardUtils.getBoardAfterMoveAndCrush(
-//				board, new PlayerMove(board.getTileAt(3, 1), board.getTileAt(4, 1)));
+//				board, new PlayerMove(board.giveTileAt(3, 1), board.giveTileAt(4, 1)));
 //		
 //		/*
 //		for (int y = 0; y < afterMoveBoard.getRows(); y++) {
 //			for (int x = 0; x < afterMoveBoard.getCols(); x++) {
-//				System.out.print(afterMoveBoard.getTileAt(x, y).getColor() + " ");
+//				System.out.print(afterMoveBoard.giveTileAt(x, y).getColor() + " ");
 //			}
 //			System.out.print("\n");
 //		}
 //		*/
 //				
-//		assertEquals(4, afterMoveBoard.getTileAt(4, 1).getColor());
-//		assertEquals(5, afterMoveBoard.getTileAt(5, 1).getColor());
-//		assertEquals(6, afterMoveBoard.getTileAt(6, 2).getColor());
-//		assertEquals(6, afterMoveBoard.getTileAt(6, 7).getColor());
-//		assertEquals(0, afterMoveBoard.getTileAt(7, 7).getColor());
-//		assertEquals(1, afterMoveBoard.getTileAt(8, 7).getColor());
-//		assertEquals(0, afterMoveBoard.getTileAt(6, 8).getColor());
-//		assertEquals(1, afterMoveBoard.getTileAt(7, 8).getColor());
-//		assertEquals(2, afterMoveBoard.getTileAt(8, 8).getColor());
-//		assertEquals(1, afterMoveBoard.getTileAt(6, 9).getColor());
-//		assertEquals(2, afterMoveBoard.getTileAt(7, 9).getColor());
-//		assertEquals(3, afterMoveBoard.getTileAt(8, 9).getColor());
-//		assertEquals(4, afterMoveBoard.getTileAt(1, 7).getColor());
-//		assertEquals(5, afterMoveBoard.getTileAt(1, 8).getColor());
-//		assertEquals(6, afterMoveBoard.getTileAt(1, 9).getColor());		
+//		assertEquals(4, afterMoveBoard.giveTileAt(4, 1).getColor());
+//		assertEquals(5, afterMoveBoard.giveTileAt(5, 1).getColor());
+//		assertEquals(6, afterMoveBoard.giveTileAt(6, 2).getColor());
+//		assertEquals(6, afterMoveBoard.giveTileAt(6, 7).getColor());
+//		assertEquals(0, afterMoveBoard.giveTileAt(7, 7).getColor());
+//		assertEquals(1, afterMoveBoard.giveTileAt(8, 7).getColor());
+//		assertEquals(0, afterMoveBoard.giveTileAt(6, 8).getColor());
+//		assertEquals(1, afterMoveBoard.giveTileAt(7, 8).getColor());
+//		assertEquals(2, afterMoveBoard.giveTileAt(8, 8).getColor());
+//		assertEquals(1, afterMoveBoard.giveTileAt(6, 9).getColor());
+//		assertEquals(2, afterMoveBoard.giveTileAt(7, 9).getColor());
+//		assertEquals(3, afterMoveBoard.giveTileAt(8, 9).getColor());
+//		assertEquals(4, afterMoveBoard.giveTileAt(1, 7).getColor());
+//		assertEquals(5, afterMoveBoard.giveTileAt(1, 8).getColor());
+//		assertEquals(6, afterMoveBoard.giveTileAt(1, 9).getColor());		
 //	}
 }
