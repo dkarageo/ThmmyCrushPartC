@@ -19,6 +19,8 @@ import gr.auth.ee.dsproject.crush.board.Tile;
  * 
  * -public Set<Tile> findAdjacentSameColorTiles(Board board, Tile currentTile, int dirMax)
  *		throws NullBoardRuntimeException, NullTileRuntimeException
+ * -public static Set<Tile> findAllNPles(Board board) 
+			throws NullBoardRuntimeException
  * -public Set<Tile> findInDirectionSameColorTiles(Board board, Tile currentTile, int direction, int max)
  *		throws NullBoardRuntimeException, NullTileRuntimeException, InvalidDirectionRuntimeException
  * -public Set<Tile> findTilesThatCrush(Set<Tile> possibleAdjacentTiles)
@@ -91,6 +93,45 @@ public class BoardUtils {
 		}
 		
 		return sameColorTiles;
+	}
+		
+	/**
+	 * Scan board for existing 3-or-more-in-a-row same color candies
+	 * horizontally or vertically. Tiles that have a color value of -1,
+	 * i.e. they are marked as unknown tiles, are excluded.
+	 * 
+	 * If given board is a null reference, NullBoardRuntimeException is
+	 * thrown.
+	 * 
+	 * @param board The board object to be searched for adjacent same
+	 * 				color candies.
+	 * @return A set containing the tiles of the board that participate in
+	 * 		   a 3-or-more-in-a-row.
+	 * @throws NullBoardRuntimeException 
+	 */
+	public static Set<Tile> findAllNPles(Board board) 
+			throws NullBoardRuntimeException 
+	{
+		if (board == null) throw new NullBoardRuntimeException();
+		
+		Set<Tile> crushTiles = new HashSet<>();
+		
+		for (int y = 0; y < board.getPRows(); y++) {
+			for (int x = 0; x < board.getCols(); x++) {				
+				Tile t = board.giveTileAt(x, y);
+				
+				if (t.getColor() != -1) {
+					Set<Tile> adjacentTiles = BoardUtils.findAdjacentSameColorTiles(
+							board, t, Integer.MAX_VALUE
+					);
+					adjacentTiles.add(t);
+					
+					crushTiles.addAll(BoardUtils.findTilesThatCrush(adjacentTiles));
+				}
+			}
+		}
+		
+		return crushTiles;
 	}
 	
 	/**

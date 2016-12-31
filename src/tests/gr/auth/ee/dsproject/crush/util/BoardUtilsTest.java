@@ -369,6 +369,101 @@ public class BoardUtilsTest {
 	}
 	
 	@Test
+	public void testFindAllNPlesException() {
+		boolean ex = false;
+		
+		try {
+			BoardUtils.findAllNPles(null);
+		} catch (BoardUtils.NullBoardRuntimeException e) {
+			ex = true;
+		}
+		
+		assertTrue(ex);
+	}
+	
+	@Test
+	public void testFindAllNPlesWithoutUnknownCandies() {
+		int[][] boardScheme = {
+				{ 1, 1, 1, 3, 4, 5, 6, 0, 1, 2 },
+				{ 1, 2, 1, 4, 5, 6, 0, 1, 2, 3 },
+				{ 1, 3, 1, 5, 6, 0, 1, 2, 3, 4 },
+				{ 1, 4, 5, 6, 0, 1, 2, 3, 4, 5 },
+				{ 4, 5, 6, 1, 1, 1, 3, 1, 1, 1 },
+				{ 5, 6, 0, 1, 2, 3, 4, 5, 6, 0 },
+				{ 0, 1, 2, 3, 4, 5, 6, 0, 1, 5 },
+				{ 3, 3, 3, 4, 5, 6, 0, 1, 2, 5 },
+				{ 3, 3, 4, 5, 6, 0, 1, 2, 3, 5 },
+				{ 3, 4, 5, 6, 0, 1, 2, 5, 5, 5 }, 
+		};
+		
+		Board board = createBoard(boardScheme);
+		
+		Set<Tile> tiles = BoardUtils.findAllNPles(board);
+		
+		assertEquals(25, tiles.size());
+		assertTrue(tiles.contains(board.giveTileAt(0, 9)));
+		assertTrue(tiles.contains(board.giveTileAt(1, 9)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 9)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 8)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 7)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 6)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 1)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 8)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 7)));
+		assertTrue(tiles.contains(board.giveTileAt(3, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(4, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(5, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(7, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(8, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 5)));
+		assertTrue(tiles.contains(board.giveTileAt(1, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 3)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 1)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(7, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(8, 0)));
+	}
+	
+	@Test
+	public void testFindAllNPlesWithUnknownCandies() {
+		int[][] boardScheme = {
+				{-1, 1, 1, 3,-1, 5, 6, 0, 1,-1 },
+				{-1, 2, 1, 4,-1, 6, 0, 1, 2,-1 },
+				{ 1, 3, 1, 5,-1, 0, 1, 2, 3,-1 },
+				{ 1, 4, 5, 6,-1, 1, 2, 3, 4,-1 },
+				{ 4, 5, 6, 1,-1, 1, 3, 1, 1,-1 },
+				{ 5, 6, 0, 1,-1, 3, 4, 5, 6,-1 },
+				{ 0, 1, 2, 3, 4, 5, 6, 0, 1,-1 },
+				{ 3, 3, 3, 4, 5, 6, 0, 1, 2, 5 },
+				{ 3, 3, 4, 5, 6, 0, 1, 2, 3, 5 },
+				{ 3, 4, 5, 6, 0, 1, 2, 5, 5, 5 }, 
+		};
+		
+		Board board = createBoard(boardScheme);
+		
+		Set<Tile> tiles = BoardUtils.findAllNPles(board);
+		
+		assertEquals(13, tiles.size());
+		assertTrue(tiles.contains(board.giveTileAt(2, 9)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 1)));
+		assertTrue(tiles.contains(board.giveTileAt(0, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 8)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 7)));
+		assertTrue(tiles.contains(board.giveTileAt(1, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(2, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 2)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 1)));
+		assertTrue(tiles.contains(board.giveTileAt(9, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(7, 0)));
+		assertTrue(tiles.contains(board.giveTileAt(8, 0)));
+	}
+		
+	@Test
 	public void testIsValidCordsOnActualBoard() {
 		for (int y = 0; y < noMoveBoard.getPRows(); y++) {
 			for (int x = 0; x < noMoveBoard.getCols(); x++) {
