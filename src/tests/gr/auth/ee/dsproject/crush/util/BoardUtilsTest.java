@@ -317,6 +317,58 @@ public class BoardUtilsTest {
 	}
 	
 	@Test
+	public void findTilesThatCrushWithHoleTiles() {
+		int[][] scheme = {
+				{ 0, 1, 2,-1, 6, 5, 6, 0, 1, 2 },
+				{ 1, 2, 3,-1, 6, 6, 0, 1, 2, 3 },
+				{ 1, 2, 2,-1, 6, 6, 6, 2, 3, 4 },
+				{ 3, 4, 5,-1, 6, 1, 2, 3, 4, 5 },
+				{ 4, 5, 6,-1, 6, 2, 3, 4, 5, 6 },
+				{ 5, 6, 0, 1, 2, 3, 4, 5, 6, 0 },
+				{ 0, 1, 2, 3, 4, 5, 6, 0, 1, 2 },
+				{ 1, 2, 3, 4, 5, 6, 0, 1, 2, 3 },
+				{ 2, 3, 4, 5, 6, 0, 1, 2, 3, 4 },
+				{ 3, 4, 5, 6, 0, 1, 2, 3, 4, 5 }, 
+		};
+		
+		Board board = createBoard(scheme);
+		
+		Set<Tile> allAdjacent = new HashSet<>(); 
+		
+		allAdjacent.addAll(BoardUtils.findAdjacentSameColorTiles(board, board.giveTileAt(3, 7), 2));
+		allAdjacent.addAll(BoardUtils.findAdjacentSameColorTiles(board, board.giveTileAt(4, 7), 2));
+		allAdjacent.add(board.giveTileAt(3, 7));
+		allAdjacent.add(board.giveTileAt(4, 7));
+		
+		// Assertions to test that the initial set is correct.
+		assertEquals(12, allAdjacent.size());
+		assertTrue(allAdjacent.contains(board.giveTileAt(3, 9)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(3, 8)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(3, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(3, 6)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(3, 5)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 9)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 8)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 6)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 5)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(5, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(6, 7)));
+		
+		// Now test the findTIlesThatCrushMethod.
+		Set<Tile> crushTiles = BoardUtils.findTilesThatCrush(allAdjacent);
+		
+		assertEquals(7, crushTiles.size());
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 9)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 8)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 6)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(4, 5)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(5, 7)));
+		assertTrue(allAdjacent.contains(board.giveTileAt(6, 7)));
+	}
+	
+	@Test
 	public void testIsValidCordsOnActualBoard() {
 		for (int y = 0; y < noMoveBoard.getPRows(); y++) {
 			for (int x = 0; x < noMoveBoard.getCols(); x++) {

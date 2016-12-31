@@ -184,13 +184,15 @@ public class BoardUtils {
 	 * adjacent same color tiles to the move's ones.
 	 * 
 	 * A tile crush, means this tile forms an at least 3-in-the-row
-	 * horizontally or vertically.
+	 * horizontally or vertically. Tiles that got a color value of -1,
+	 * are considered as tiles of unknown color, and are automatically
+	 * excluded from tiles that crush.
 	 * 
 	 * The tile set given should only contain the same color tiles
 	 * adjacent to the two tiles a move consists of. That means
 	 * the set should contain at most two different color tiles.
 	 * If tiles that don't fit these criteria are given, the
-	 * return set may contain more tiles than the ones who
+	 * return set may contain more tiles than the ones which
 	 * actually crush. 
 	 * 
 	 * If a null argument is provided for possibleAdjacentTiles parameter,
@@ -278,6 +280,9 @@ public class BoardUtils {
 			byX.add(t);
 			byY.add(t);
 		}
+		
+		// Remove tiles of unknown color.
+		if (categorizedTiles.containsKey(-1)) categorizedTiles.remove(-1);
 		
 		// Finally iterate over the categories created before and if
 		// a category contains at least 3 tiles, then these tiles crush.
