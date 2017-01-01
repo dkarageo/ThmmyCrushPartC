@@ -58,6 +58,23 @@ public class NodeTest {
 	}
 	
 	@Test
+	public void testParentBoardAndMoveArgumentsConstructor() {
+		Node parent = new Node();
+		Board board = new Board(10);
+		PlayerMove move = new PlayerMove();
+		
+		Node n = new Node(parent, board, move);
+
+		assertEquals(null, n.getChildren());
+		assertEquals(0, n.getNodeDepth());
+		assertEquals(0.0, n.getNodeEvaluation(), 0.001);
+		
+		assertEquals(parent, n.getParent());
+		assertEquals(board, n.getNodeBoard());
+		assertEquals(move, n.getNodeMove());
+	}
+	
+	@Test
 	public void testSetParent() {
 		Node parent = new Node();
 		Node n = new Node();

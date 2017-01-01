@@ -16,6 +16,7 @@ import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
  * -public Node()
  * -public Node(Node parent)
  * -public Node(Node parent, Board board)
+ * -public Node(Node parent, Board board, PlayerMove move)
  * 
  * Public methods defined in Node:
  * -public Node getParent()
@@ -79,7 +80,9 @@ public class Node {
 	/**
 	 * Create a Node object without any arguments.
 	 */
-	public Node() { }
+	public Node() {
+		children = new ArrayList<>();
+	}
 	
 	/**
 	 * Create a Node object by providing the parent Node object.
@@ -88,6 +91,7 @@ public class Node {
 	 * 				 the tree.
 	 */
 	public Node(Node parent) {
+		this();
 		this.parent = parent;
 	}
 	
@@ -100,8 +104,28 @@ public class Node {
 	 * @param board The board associated with this node.
 	 */
 	public Node(Node parent, Board board) {
+		this();
 		this.parent = parent;
 		this.nodeBoard = board;
+	}
+	
+	/**
+	 * Create a new node by providing the parent node, the board
+	 * representing the current state and the move that lead to this
+	 * state.
+	 *  
+	 * @param parent A Node object representing the previous state. For
+	 * 				 root nodes it may be null.
+	 * @param board A Board object representing the current state of
+	 * 				the game.
+	 * @param move A PlayerMove object representing the move which lead
+	 * 			   to current state. For root nodes it may be null.
+	 */
+	public Node(Node parent, Board board, PlayerMove move) {
+		this();
+		this.parent = parent;
+		this.nodeBoard = board;
+		this.nodeMove = move;
 	}
 	
 	
