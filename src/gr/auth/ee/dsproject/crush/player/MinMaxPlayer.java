@@ -75,7 +75,7 @@ public class MinMaxPlayer implements AbstractPlayer
     	Node root = new Node(null, board, null);
     	
     	// Create the minimax tree to a depth of 2.
-    	createMinimaxTree(root, 2, -Double.MAX_VALUE, Double.MAX_VALUE, true);
+    	createMinimaxTree(root, 3, -Double.MAX_VALUE, Double.MAX_VALUE, true);
     	
     	// Return the highest scoring move out of minimax tree.
     	return findBestMove(root).toCordsArray();
@@ -173,7 +173,14 @@ public class MinMaxPlayer implements AbstractPlayer
     	// levels.
     	if (depth != 0) {
     		createChildren(n);
-    		if (n.getChildren().size() == 0) return n.getNodeEvaluation();
+    		if (n.getChildren().size() == 0 ) {
+    			// If known available moves on the board have been 
+    			// depleted and no further search can be done, then
+    			// consider the current situation a bit worse by a constant factor.
+//    			System.out.println("No moves found");
+    			if (maximizing)	return n.getNodeEvaluation() + (double) depth * 12.0;
+    			else return n.getNodeEvaluation() - (double) depth * 12.0;
+    		}
     		
     		if (maximizing) {
     			double cMax = -Double.MAX_VALUE;
@@ -183,10 +190,10 @@ public class MinMaxPlayer implements AbstractPlayer
     				
     				cMax = Math.max(cMax, eval);
     				
-//    				if (n.getNodeEvaluation() + eval >= max) {
-//    					cMax = max;
-//    					break;
-//    				}
+    				if ((n.getNodeEvaluation() + eval) >= max) {
+    					cMax = eval;
+    					break;
+    				}
         		}
     			
     			n.setNodeEvaluation(n.getNodeEvaluation() + cMax);
@@ -199,10 +206,10 @@ public class MinMaxPlayer implements AbstractPlayer
     				
     				cMin = Math.min(cMin, eval);
     				
-//    				if (n.getNodeEvaluation() + eval <= min) {
-//    					cMin = min;
-//    					break;
-//    				}	
+    				if ((n.getNodeEvaluation() + eval) <= min) {
+    					cMin = eval;
+    					break;
+    				}	
         		}
     			
     			n.setNodeEvaluation(n.getNodeEvaluation() + cMin);    			
