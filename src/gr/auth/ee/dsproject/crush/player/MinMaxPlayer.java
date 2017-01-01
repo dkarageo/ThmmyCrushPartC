@@ -70,13 +70,12 @@ public class MinMaxPlayer implements AbstractPlayer
     
     public int[] getNextMove (ArrayList<int[]> availableMoves, Board board)
     {
-    	// Create the root node that only has children.
-    	Node root = new Node(null, null);
-    	root.setNodeMove(null);
-    	createChildren(root, board, availableMoves, 0);
+    	// Create the root node representing current state of board.
+    	// This is the initial state for minimax.
+    	Node root = new Node(null, board, null);
     	
-    	// Create the minimax tree to a depth of 4.
-    	evaluateMinimax(root, 1, -Double.MAX_VALUE, Double.MAX_VALUE, true);
+    	// Create the minimax tree to a depth of 2.
+    	createMinimaxTree(root, 2, -Double.MAX_VALUE, Double.MAX_VALUE, true);
     	
     	// Return the highest scoring move out of minimax tree.
     	return findBestMove(root).toCordsArray();
@@ -86,11 +85,142 @@ public class MinMaxPlayer implements AbstractPlayer
 //==== Private Methods ====
     
     /**
+     * Creates all the children of the given node.
      * 
-     * @param root
-     * @return
+     * It creates all the children, i.e. the next states,
+     * that are possible based on the board of the given node.
+     * 
+     * It finds out all possible moves on the board of given node
+     * and for every single one of these moves creates a child node
+     * with its move set to the move lead there, its board set to
+     * the board this move caused to be created and parent set to
+     * given node.
+     * 
+     * @param n The node whose children should be created.
      */
-    private PlayerMove findBestMove (Node root) {    	
+    private void createChildren(Node n) {
+
+    	Board curBoard = n.getNodeBoard();
+    	
+    	for (int[] dirMove : CrushUtilities.getAvailableMoves(curBoard)) {
+    		
+    		// Convert old style move of [x, y, direction] to PlayerMove object.
+    		int[] cordsMove = CrushUtilities.calculateNextMove(dirMove);
+    		PlayerMove move = new PlayerMove(
+    				curBoard.giveTileAt(cordsMove[0], cordsMove[1]),
+    				curBoard.giveTileAt(cordsMove[2], cordsMove[3])
+    		);
+    		
+    		Board afterMoveBoard = CrushUtilities.boardAfterFullMove(curBoard, dirMove);
+    		
+    		Node child = new Node(n, afterMoveBoard, move);
+    		
+    		n.addChild(child);
+    	}
+    }
+    
+    /**
+     * Creates an A-B pruned minimax tree under the root node until
+     * the given depth and returns the evaluation of the current state
+     * for specified player, maximizing or minimizing.
+     * 
+     * Root node should contain at least the board of the initial state.
+     * 
+     * It should normally be called with min and max arguments of
+     * -Double.MAX_VALUE and Double.MAX_VALUE accordingly. Though
+     * they can be set to any best matching value and are the 
+     * initial values used for A-B pruning.
+     * 
+     * Maximizing defines if the current state should be checked from
+     * player's perspective, i.e. maximizing, or enemy's perspective,
+     * i.e. minimizing. Maximizing player considers greater values better,
+     * when minimizing player considers lower values better.
+     * 
+     * @param n The root node for the tree to be created.
+     * @param depth The depth to which the tree will be created.
+     * @param min The minimum evaluation value that is considered valid.
+     * @param max The maximum evaluation value that is considered valid.
+     * @param maximizing True for getting evaluation for player's perspective,
+     * 					 false for getting evaluation for enemy's perspective.	
+     * @return The evaluation of the current state for given player.
+     */
+    private double createMinimaxTree(Node n, int depth, double min, 
+    								 double max, boolean maximizing) 
+    {
+    	// Find the evaluation of current state. Since this method is going
+    	// to run one more time than depth, the evaluation here is the
+    	// opposite than maximizing. This happens because the first call
+    	// is the root node, and for every move it's effect is calculated
+    	// on the next run. 
+    	if (n.getParent() == null) {
+    		// If parent is null, then no move lead to current state so
+    		// evaluation of current state is 0.
+    		n.setNodeEvaluation(0);
+    	
+    	} else if (maximizing) {
+    		n.setNodeEvaluation(
+    				-simpleHeuristicEvaluation(n.getParent().getNodeBoard(), n.getNodeMove())
+    		);
+    	
+    	} else {
+    		n.setNodeEvaluation(
+    				simpleHeuristicEvaluation(n.getParent().getNodeBoard(), n.getNodeMove())
+    		);
+    	}
+    	
+    	// If current node is not a leaf, then evaluate its children,
+    	// and form the overall evaluation by using the ones from deeper
+    	// levels.
+    	if (depth != 0) {
+    		createChildren(n);
+    		if (n.getChildren().size() == 0) return n.getNodeEvaluation();
+    		
+    		if (maximizing) {
+    			double cMax = -Double.MAX_VALUE;
+    			
+    			for (Node child : n.getChildren()) {
+    				double eval = createMinimaxTree(child, depth - 1, cMax, max, false);
+    				
+    				cMax = Math.max(cMax, eval);
+    				
+//    				if (n.getNodeEvaluation() + eval >= max) {
+//    					cMax = max;
+//    					break;
+//    				}
+        		}
+    			
+    			n.setNodeEvaluation(n.getNodeEvaluation() + cMax);
+    			
+    		} else {
+    			double cMin = Double.MAX_VALUE;
+    			
+    			for (Node child : n.getChildren()) {
+    				double eval = createMinimaxTree(child, depth - 1, cMin, max, true);
+    				
+    				cMin = Math.min(cMin, eval);
+    				
+//    				if (n.getNodeEvaluation() + eval <= min) {
+//    					cMin = min;
+//    					break;
+//    				}	
+        		}
+    			
+    			n.setNodeEvaluation(n.getNodeEvaluation() + cMin);    			
+    		}
+    	}
+    	
+    	return n.getNodeEvaluation();
+    }
+       
+    /**
+     * Find the move that lead to the highest evaluated branch
+     * on a minimax tree.
+     * 
+     * @param root The root node of the minimax tree.
+     * @return The move lead to highest scoring branch of
+     * 		   the tree.
+     */
+    private PlayerMove findBestMove(Node root) {    	
     	PlayerMove bestMove = null;
     	double max = -Double.MAX_VALUE;
     	    	
@@ -104,125 +234,18 @@ public class MinMaxPlayer implements AbstractPlayer
     	}
     	
     	return bestMove;
-    }
+    }    
     
-    private double evaluateMinimax ( 
-		  	  Node curNode, int depth, double min, double max, 
-		  	  boolean maximizing)
-    {    	
-    	// On leaves use all available heuristics in order to get the best
-		// possible evaluation, since no more future check is done by minimax.
-    	if (depth == 0 && maximizing) {    		
-    		double eval = complexHeuristicEvaluation(
-    				curNode.getNodeBoard(), curNode.getNodeMove()
-    		);
-    		curNode.setNodeEvaluation(curNode.getNodeEvaluation() + eval);
-    		
-    		return curNode.getNodeEvaluation();
-    		
-	    } else if (depth == 0 && !maximizing) {
-	    	double eval = complexHeuristicEvaluation(
-    				curNode.getNodeBoard(), curNode.getNodeMove()
-    		);
-    		curNode.setNodeEvaluation(curNode.getNodeEvaluation() - eval);
-    		
-    		return curNode.getNodeEvaluation();
-	    }
-    	
-	    if (maximizing) {	    	
-	    	// If the node contains a move, i.e. it's not the root one,
-	    	// evaluate this partial score of its move and set it as
-	    	// node's evaluation.
-	    	if (curNode.getNodeMove() != null) {
-		    	curNode.setNodeEvaluation(
-		    			curNode.getNodeEvaluation() +
-		    			simpleHeuristicEvaluation(
-		    					curNode.getNodeBoard(),	curNode.getNodeMove()
-		    	));
-	    	}
-	    	
-	    	double cMax = -Double.MAX_VALUE;
-	    		    	
-	    	for (Node child : curNode.getChildren()) {  			    		
-	    		Board childChildrenBoard = CrushUtilities.boardAfterFullMove(
-						child.getNodeBoard(), child.getNodeMove().toDirArray());
-	    		
-	    		createChildren(
-	    				child, 
-	    				childChildrenBoard,
-	    				CrushUtilities.getAvailableMoves(childChildrenBoard),
-	    				child.getNodeEvaluation()
-	    		);
-	    		
-	    		double eval = evaluateMinimax(child, depth - 1, cMax, max, false);
-	    		
-	    		cMax = Math.max(cMax, eval);
-	    		if (cMax > max) {
-	    			cMax = max;
-	    			break;
-	    		}
-	    	}
-	    	
-	    	curNode.setNodeEvaluation(curNode.getNodeEvaluation());
-	    	
-	    	return curNode.getNodeEvaluation();
-	    } else {
-	    	// If the node contains a move, i.e. it's not the root one,
-	    	// evaluate this partial score of its move and set it as
-	    	// node's evaluation.
-	    	if (curNode.getNodeMove() != null) {
-		    	curNode.setNodeEvaluation(
-		    			curNode.getNodeEvaluation() -
-		    			simpleHeuristicEvaluation(
-		    					curNode.getNodeBoard(),	curNode.getNodeMove()
-		    	));
-	    	}
-	    	
-	    	double cMin = Double.MAX_VALUE;
-	    		    	
-	    	for (Node child : curNode.getChildren()) {  			    		
-	    		Board childChildrenBoard = CrushUtilities.boardAfterFullMove(
-						child.getNodeBoard(), child.getNodeMove().toDirArray());
-	    		
-	    		createChildren(
-	    				child, 
-	    				childChildrenBoard,
-	    				CrushUtilities.getAvailableMoves(childChildrenBoard),
-	    				child.getNodeEvaluation()
-	    		);
-	    		
-	    		double eval = evaluateMinimax(child, depth - 1, min, cMin, true);
-	    		
-	    		cMin = Math.min(cMin, eval);
-	    		if (cMin < min) {
-	    			cMin = min;
-	    			break;
-	    		}
-	    	}
-	    	
-	    	curNode.setNodeEvaluation(curNode.getNodeEvaluation());
-	    	
-	    	return curNode.getNodeEvaluation();
-	    }
-    }
-    
-    private void createChildren(
-    		Node n, Board curBoard, ArrayList<int[]> availableMoves, 
-    		double previous) 
-    {      	
-    	for (int[] move : availableMoves) {
-    		int[] cordMove = CrushUtilities.calculateNextMove(move);
-    		PlayerMove pMove = new PlayerMove(curBoard.getTileAt(cordMove[0], cordMove[1]),
-    										  curBoard.getTileAt(cordMove[2], cordMove[3]));
-    		
-    		Node child = new Node(n, curBoard);
-    		child.setNodeMove(pMove);
-    		child.setNodeEvaluation(previous);
-    		
-    		n.addChild(child);
-    	}
-    }
-    
+    /**
+     * Do a simple heuristic evaluation of the given move, based on the
+     * given board.
+     * 
+     * Evaluation is done using solely a CandiesRemovedHeuristic.
+     * 
+     * @param board A board on which the move will be evaluated.
+     * @param move The move to be evaluated.
+     * @return A double representing how good the move is.
+     */
     private double simpleHeuristicEvaluation(Board board, PlayerMove move) {
     	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.0));
     	
@@ -230,13 +253,21 @@ public class MinMaxPlayer implements AbstractPlayer
     	
     	return engine.evaluate();
     }
-    
-    private double complexHeuristicEvaluation(Board board, PlayerMove move) {
-    	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.0));
-    	
-    	engine.add(new CandiesRemovedHeuristic(move, board), SliderMathModel.VERY_HIGH);
-    	//engine.add(new DistanceFromTopHeuristic(move, board), SliderMathModel.VERY_LOW);
-    	
-    	return engine.evaluate();
-    }
+
+// ==== Unused Code ====
+//    
+//    /**
+//     * 
+//     * @param board
+//     * @param move
+//     * @return
+//     */
+//    private double complexHeuristicEvaluation(Board board, PlayerMove move) {
+//    	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.0));
+//    	
+//    	engine.add(new CandiesRemovedHeuristic(move, board), SliderMathModel.VERY_HIGH);
+//    	//engine.add(new DistanceFromTopHeuristic(move, board), SliderMathModel.VERY_LOW);
+//    	
+//    	return engine.evaluate();
+//    }
 }
