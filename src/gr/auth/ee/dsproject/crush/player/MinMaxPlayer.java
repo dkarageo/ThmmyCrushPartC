@@ -104,7 +104,7 @@ public class MinMaxPlayer implements AbstractPlayer {
     	
     	// Create the root node representing current state of board.
     	// This is the initial state for minimax.
-    	Node root = new Node(null, CrushUtilities.cloneBoard(board, 40), null);
+    	Node root = new Node(null, CrushUtilities.cloneBoard(board, 45), null);
     	
     	// Create the minimax tree to the depth defined by MINIMAX_DEPTH constant.
     	createMinimaxTree(root, MINIMAX_DEPTH, -Double.MAX_VALUE, Double.MAX_VALUE, true);
@@ -152,9 +152,16 @@ public class MinMaxPlayer implements AbstractPlayer {
     }
     
     /**
-     * Creates an A-B pruned minimax tree under the root node until
-     * the given depth and returns the evaluation of the current state
-     * for specified player, maximizing or minimizing.
+     * Creates a memory optimized A-B pruned minimax tree under 
+     * the root node, which should only be used for accessing root
+     * node's evaluation, its children evaluations and its children moves.
+     * It returns the evaluation of the current state for specified 
+     * player, maximizing or minimizing
+     * 
+     * The evaluations are as expected formed by searching until the given
+     * depth. Though all nodes after first level are discarded. Thus,
+     * memory consumption scales linear with depth instead of
+     * exponentially.
      * 
      * Root node should contain at least the board of the initial state.
      * 
@@ -247,6 +254,14 @@ public class MinMaxPlayer implements AbstractPlayer {
     			n.setNodeEvaluation(n.getNodeEvaluation() + cMin);    			
     		}
     	}
+    	
+    	// Release from memory all the node that will never used again.
+    	// It essentially leaves the tree only with root node and its
+    	// children, and they also got their board states removed, but
+    	// it makes ram consumption to scale linear with depth instead
+    	// of exponentially.
+    	n.setNodeBoard(null);
+    	if (depth < MINIMAX_DEPTH - 1) n.setChildren(null);
     	
     	return n.getNodeEvaluation();
     }
