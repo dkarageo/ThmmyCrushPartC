@@ -10,8 +10,40 @@ import gr.auth.ee.dsproject.crush.node.Node;
 import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
 
 
-public class MinMaxPlayer implements AbstractPlayer
-{
+/**
+ * A player that uses minimax algorithm with AB pruning on
+ * a heuristics based evaluate function.
+ * 
+ * Depth of minimax algorithm is defined in MINIMAX_DEPTH
+ * constant of this class.
+ * 
+ * Constants defined in MinMaxPlayer:
+ * -public static final int MINIMAX_DEPTH = 4
+ * 
+ * Public constructors defined in MinMaxPlayer:
+ * -public MinMaxPlayer(Integer pid)
+ * 
+ * Public methods defined in MinMaxPlayer:
+ * -public String getName()
+ * -public int getId()
+ * -public int getScore()
+ * -public void setScore(int score)
+ * -public void setId(int id)
+ * -public void setName(String name)
+ * -public int[] getNextMove(ArrayList<int[]> availableMoves, Board board)
+ * 
+ * @author Dimitrios Karageorgiou
+ * @version 0.3
+ */
+public class MinMaxPlayer implements AbstractPlayer {
+
+//==== Public Constants ====
+	
+	/**
+	 * Defines the depth of minimax algorithm.
+	 */
+	public static final int MINIMAX_DEPTH = 4;
+	
 	
 //==== Instance Variables ====
 	
@@ -22,9 +54,9 @@ public class MinMaxPlayer implements AbstractPlayer
     
 //==== Public Constructors ====
     
-    public MinMaxPlayer (Integer pid)
-    {
-        name = "MinMax";
+    public MinMaxPlayer(Integer pid) {
+    	
+    	name = "MinMax";
     	id = pid;
         score = 0;
     }
@@ -32,50 +64,50 @@ public class MinMaxPlayer implements AbstractPlayer
     
 //==== Public Getters ====    
     
-    public String getName ()
-    {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public int getId ()
-    {
-        return id;
-    }
+    public int getId() { return id; }
 
-    public int getScore ()
-    {
-        return score;
-    }
+    public int getScore() { return score; }
     
-
+    
 //==== Public Setters ====
     
-    public void setScore (int score)
-    {
-        this.score = score;
-    }
+    public void setScore(int score) { this.score = score; }
     
-    public void setId (int id)
-    {
-        this.id = id;
-    }
+    public void setId(int id) { this.id = id; }
 
-    public void setName (String name)
-    {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
 
     
 //==== Public Methods ====
     
-    public int[] getNextMove (ArrayList<int[]> availableMoves, Board board)
-    {
+    /**
+     * Finds and returns the best move out of provided available
+     * moves that is going to be played on the given board, using
+     * a minimax algorithm based on a heuristic evaluation function.
+     * 
+     * Depth of minimax algoritmh is defined by MINIMAX_DEPTH
+     * constant in MinMaxPlayer class.
+     * 
+     * @param availableMoves The currently available moves for the
+     * 						 player to play on the given board, in
+     * 						 the form of [x, y, direction] int array.
+     * 						 All these moves are packed into an
+     * 						 ArrayList object. direction value as defined
+     * 						 in board.CrushUtilities
+     * @param board The board on which the move is going to be played.
+     * @return The move that player should play, if the form of
+     * 		   [x1, y1, x2, y2] int array.
+     */
+    public int[] getNextMove(ArrayList<int[]> availableMoves, Board board) {
+    	
     	// Create the root node representing current state of board.
     	// This is the initial state for minimax.
     	Node root = new Node(null, CrushUtilities.cloneBoard(board, 40), null);
     	
-    	// Create the minimax tree to a depth of 2.
-    	createMinimaxTree(root, 4, -Double.MAX_VALUE, Double.MAX_VALUE, true);
+    	// Create the minimax tree to the depth defined by MINIMAX_DEPTH constant.
+    	createMinimaxTree(root, MINIMAX_DEPTH, -Double.MAX_VALUE, Double.MAX_VALUE, true);
     	
     	// Return the highest scoring move out of minimax tree.
     	return findBestMove(root).toCordsArray();
@@ -146,7 +178,7 @@ public class MinMaxPlayer implements AbstractPlayer
      */
     private double createMinimaxTree(Node n, int depth, double min, 
     								 double max, boolean maximizing) 
-    {
+    {    	
     	// Find the evaluation of current state. Since this method is going
     	// to run one more time than depth, the evaluation here is the
     	// opposite than maximizing. This happens because the first call
@@ -227,7 +259,8 @@ public class MinMaxPlayer implements AbstractPlayer
      * @return The move lead to highest scoring branch of
      * 		   the tree.
      */
-    private PlayerMove findBestMove(Node root) {    	
+    private PlayerMove findBestMove(Node root) {
+    	
     	PlayerMove bestMove = null;
     	double max = -Double.MAX_VALUE;
     	    	
@@ -254,6 +287,7 @@ public class MinMaxPlayer implements AbstractPlayer
      * @return A double representing how good the move is.
      */
     private double simpleHeuristicEvaluation(Board board, PlayerMove move) {
+    	
     	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.0));
     	
     	engine.add(new CandiesRemovedHeuristic(move, board), SliderMathModel.VERY_HIGH);
