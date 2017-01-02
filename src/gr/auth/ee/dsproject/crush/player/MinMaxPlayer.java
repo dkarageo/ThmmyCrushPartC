@@ -102,12 +102,18 @@ public class MinMaxPlayer implements AbstractPlayer {
      */
     public int[] getNextMove(ArrayList<int[]> availableMoves, Board board) {
     	
+    	long startTime = System.nanoTime();
+    	
     	// Create the root node representing current state of board.
     	// This is the initial state for minimax.
     	Node root = new Node(null, CrushUtilities.cloneBoard(board, 45), null);
     	
     	// Create the minimax tree to the depth defined by MINIMAX_DEPTH constant.
     	createMinimaxTree(root, MINIMAX_DEPTH, -Double.MAX_VALUE, Double.MAX_VALUE, true);
+    	
+    	long stopTime = System.nanoTime();
+    	long elapsedTime = (stopTime - startTime) / 1000000;
+    	System.out.println("Move calculation time: " + elapsedTime + "ms");
     	
     	// Return the highest scoring move out of minimax tree.
     	return findBestMove(root).toCordsArray();
