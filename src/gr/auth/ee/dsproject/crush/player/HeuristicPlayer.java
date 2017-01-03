@@ -223,8 +223,8 @@ public class HeuristicPlayer implements AbstractPlayer {
     			// depleted and no further search can be done, then
     			// consider the current situation a bit worse by a constant factor.
 //    			System.out.println("No moves found");
-    			if (maximizing)	return n.getNodeEvaluation() + (double) depth * 12.0;
-    			else return n.getNodeEvaluation() - (double) depth * 12.0;
+    			if (maximizing)	return n.getNodeEvaluation() +  12.0;
+    			else return n.getNodeEvaluation() - 12.0;
     		}
     		
     		if (maximizing) {

@@ -223,8 +223,16 @@ public class MinMaxPlayer implements AbstractPlayer {
     			// depleted and no further search can be done, then
     			// consider the current situation a bit worse by a constant factor.
     			System.out.println("No moves found");
-    			if (maximizing)	n.setNodeEvaluation(n.getNodeEvaluation() +  12.0);
-    			else n.setNodeEvaluation(n.getNodeEvaluation() - 12.0);
+    			
+    			if (depth == 1) {
+    				if (maximizing)	n.setNodeEvaluation(n.getNodeEvaluation() +  20.0);
+    				else n.setNodeEvaluation(n.getNodeEvaluation() - 20.0);
+    			
+    			} else {
+    				if (maximizing)	n.setNodeEvaluation(n.getNodeEvaluation() +  12.0);
+    				else n.setNodeEvaluation(n.getNodeEvaluation() - 12.0);
+    			}
+    			
     			return n.getNodeEvaluation();
     		}
     		
