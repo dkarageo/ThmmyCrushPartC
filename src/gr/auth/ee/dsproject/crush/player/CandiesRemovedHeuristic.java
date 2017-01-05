@@ -147,7 +147,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		
 		// Calculate the tiles removed by chained moves.
 		overallCandiesRemoved += countChainedCandiesRemoved(
-				CrushUtilities.boardAfterFirstMove(board, move.toDirArray())
+				CrushUtilities.boardAfterFirstCrush(board, move.toDirArray())
 		);
 		
 		if (overallCandiesRemoved > 6) {
@@ -194,7 +194,7 @@ public class CandiesRemovedHeuristic extends Heuristic {
 		// but without any crushes.
 		Board boardJustBeforeCrush = CrushUtilities.cloneBoard(board);
 		
-		boardJustBeforeCrush = CrushUtilities.boardAfterMovingCandies(
+		boardJustBeforeCrush = CrushUtilities.boardAfterFirstMove(
 				boardJustBeforeCrush, move.toDirArray()
 		);
 		

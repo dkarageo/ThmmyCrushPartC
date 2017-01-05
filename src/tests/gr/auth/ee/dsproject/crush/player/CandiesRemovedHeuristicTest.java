@@ -228,7 +228,7 @@ public class CandiesRemovedHeuristicTest {
 		removed.add(board.giveTileAt(5, 8));
 		
 		// Now calculate the actual chained moves.
-		Board afterCrush = CrushUtilities.boardAfterFirstMove(board, move.toDirArray());
+		Board afterCrush = CrushUtilities.boardAfterFirstCrush(board, move.toDirArray());
 		int chainCount = heur.countChainedCandiesRemoved(afterCrush);
 		
 		assertEquals(4, chainCount);
@@ -265,7 +265,7 @@ public class CandiesRemovedHeuristicTest {
 		removed.remove(board.giveTileAt(6, 7));
 		removed.add(board.giveTileAt(5, 7));
 		
-		Board afterCrush = CrushUtilities.boardAfterFirstMove(board, move.toDirArray());
+		Board afterCrush = CrushUtilities.boardAfterFirstCrush(board, move.toDirArray());
 		
 		int chainCount = heur.countChainedCandiesRemoved(afterCrush);
 		
@@ -303,7 +303,7 @@ public class CandiesRemovedHeuristicTest {
 		removed.remove(board.giveTileAt(6, 7));
 		removed.add(board.giveTileAt(5, 7));
 		
-		Board afterCrush = CrushUtilities.boardAfterFirstMove(board, move.toDirArray());
+		Board afterCrush = CrushUtilities.boardAfterFirstCrush(board, move.toDirArray());
 		
 		int chainCount = heur.countChainedCandiesRemoved(afterCrush);
 		
