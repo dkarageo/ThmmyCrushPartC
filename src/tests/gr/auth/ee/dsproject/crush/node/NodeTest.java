@@ -18,7 +18,8 @@ public class NodeTest {
 		Node n = new Node();
 		
 		assertEquals(null, n.getParent());
-		assertEquals(null, n.getChildren());
+		assertNotEquals(null, n.getChildren());
+		assertEquals(0, n.getChildren().size());
 		assertEquals(0, n.getNodeDepth());
 		assertEquals(null, n.getNodeMove());
 		assertEquals(0.0, n.getNodeEvaluation(), 0.001);
@@ -32,7 +33,8 @@ public class NodeTest {
 		
 		Node n = new Node(parent);
 		
-		assertEquals(null, n.getChildren());
+		assertNotEquals(null, n.getChildren());
+		assertEquals(0, n.getChildren().size());
 		assertEquals(0, n.getNodeDepth());
 		assertEquals(null, n.getNodeMove());
 		assertEquals(0.0, n.getNodeEvaluation(), 0.001);
@@ -48,7 +50,8 @@ public class NodeTest {
 		
 		Node n = new Node(parent, board);
 		
-		assertEquals(null, n.getChildren());
+		assertNotEquals(null, n.getChildren());
+		assertEquals(0, n.getChildren().size());
 		assertEquals(0, n.getNodeDepth());
 		assertEquals(null, n.getNodeMove());
 		assertEquals(0.0, n.getNodeEvaluation(), 0.001);
@@ -64,8 +67,9 @@ public class NodeTest {
 		PlayerMove move = new PlayerMove();
 		
 		Node n = new Node(parent, board, move);
-
-		assertEquals(null, n.getChildren());
+		
+		assertNotEquals(null, n.getChildren());
+		assertEquals(0, n.getChildren().size());
 		assertEquals(0, n.getNodeDepth());
 		assertEquals(0.0, n.getNodeEvaluation(), 0.001);
 		
