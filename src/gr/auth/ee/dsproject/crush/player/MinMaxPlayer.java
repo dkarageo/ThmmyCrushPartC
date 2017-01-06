@@ -113,7 +113,7 @@ public class MinMaxPlayer implements AbstractPlayer {
     	
     	long stopTime = System.nanoTime();
     	long elapsedTime = (stopTime - startTime) / 1000000;
-    	System.out.println("Move calculation time: " + elapsedTime + "ms");
+//    	System.out.println("Move calculation time: " + elapsedTime + "ms");
     	
     	// Return the highest scoring move out of minimax tree.
     	return findBestMove(root).toCordsArray();
@@ -222,7 +222,9 @@ public class MinMaxPlayer implements AbstractPlayer {
     			// If known available moves on the board have been 
     			// depleted and no further search can be done, then
     			// consider the current situation a bit worse by a constant factor.
+    			
     			System.out.println("No moves found");
+    			System.out.println("No moves depth remaining: " + depth);
     			
     			if (depth == 1) {
     				if (maximizing)	n.setNodeEvaluation(n.getNodeEvaluation() +  20.0);
@@ -232,6 +234,8 @@ public class MinMaxPlayer implements AbstractPlayer {
     				if (maximizing)	n.setNodeEvaluation(n.getNodeEvaluation() +  12.0);
     				else n.setNodeEvaluation(n.getNodeEvaluation() - 12.0);
     			}
+    			
+    			System.out.println("No moves evaluation: " + n.getNodeEvaluation());
     			
     			return n.getNodeEvaluation();
     		}
@@ -277,6 +281,8 @@ public class MinMaxPlayer implements AbstractPlayer {
     	// of exponentially.
     	n.setNodeBoard(null);
     	if (depth < MINIMAX_DEPTH - 1) n.setChildren(null);
+    	
+//    	System.out.println("Node evaluation: " + n.getNodeEvaluation());
     	
     	return n.getNodeEvaluation();
     }

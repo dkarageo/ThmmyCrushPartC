@@ -113,7 +113,7 @@ public class HeuristicPlayer implements AbstractPlayer {
     	
     	long stopTime = System.nanoTime();
     	long elapsedTime = (stopTime - startTime) / 1000000;
-    	System.out.println("Move calculation time: " + elapsedTime + "ms");
+//    	System.out.println("Move calculation time: " + elapsedTime + "ms");
     	
     	// Return the highest scoring move out of minimax tree.
     	return findBestMove(root).toCordsArray();
@@ -222,7 +222,7 @@ public class HeuristicPlayer implements AbstractPlayer {
     			// If known available moves on the board have been 
     			// depleted and no further search can be done, then
     			// consider the current situation a bit worse by a constant factor.
-    			System.out.println("No moves found");    			
+//    			System.out.println("No moves found");    			
     			
     			if (depth == 1) {
     				if (maximizing)	n.setNodeEvaluation(n.getNodeEvaluation() +  20.0);
