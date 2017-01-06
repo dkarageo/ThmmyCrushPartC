@@ -313,9 +313,10 @@ public class MinMaxPlayer implements AbstractPlayer {
      */
     private double simpleHeuristicEvaluation(Board board, PlayerMove move) {
     	
-    	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.0));
+    	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.7));
     	
     	engine.add(new CandiesRemovedHeuristic(move, board), SliderMathModel.VERY_HIGH);
+    	engine.add(new DistanceFromTopHeuristic(move, board), SliderMathModel.VERY_LOW);
     	
     	return engine.evaluate();
     }
