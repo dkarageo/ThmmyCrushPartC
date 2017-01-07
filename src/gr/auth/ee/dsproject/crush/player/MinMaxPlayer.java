@@ -198,12 +198,12 @@ public class MinMaxPlayer implements AbstractPlayer {
     	
     	} else if (maximizing) {
     		n.setNodeEvaluation(
-    				-simpleHeuristicEvaluation(n.getParent().getNodeBoard(), n.getNodeMove())
+    				-doHeuristicEvaluation(n.getParent().getNodeBoard(), n.getNodeMove())
     		);
     	
     	} else {
     		n.setNodeEvaluation(
-    				simpleHeuristicEvaluation(n.getParent().getNodeBoard(), n.getNodeMove())
+    				doHeuristicEvaluation(n.getParent().getNodeBoard(), n.getNodeMove())
     		);
     	}
     	
@@ -212,21 +212,17 @@ public class MinMaxPlayer implements AbstractPlayer {
     	// levels.
     	if (depth != 0) {
     		createChildren(n);
+    		
     		if (n.getChildren().size() == 0 ) {
     			// If known available moves on the board have been 
     			// depleted and no further search can be done, then
-    			// consider the current situation a bit worse by a constant factor.
+    			// do a fixed evaluation for the future moves that
+    			// may exist on the actual board.
 
 //    			System.out.println("No moves found");
     			
-    			if (depth == 1) {
-    				if (maximizing)	n.setNodeEvaluation(n.getNodeEvaluation() + 20.0);
-        			else n.setNodeEvaluation(n.getNodeEvaluation() - 20.0);
-    			
-    			} else {
-    				if (maximizing)	n.setNodeEvaluation(n.getNodeEvaluation() + 12.0);
-        			else n.setNodeEvaluation(n.getNodeEvaluation() - 12.0);
-    			}
+    			if (maximizing)	n.setNodeEvaluation(n.getNodeEvaluation() + doFixedEvaluation(depth));
+        		else n.setNodeEvaluation(n.getNodeEvaluation() - doFixedEvaluation(depth));
     			
     			return n.getNodeEvaluation();
     		}
@@ -302,16 +298,35 @@ public class MinMaxPlayer implements AbstractPlayer {
     }    
     
     /**
-     * Do a simple heuristic evaluation of the given move, based on the
+     * Does a fixed evaluation and returns a fixed evaluation value.
+     * 
+     * Used when no known data are available in order to do a real
+     * heuristic evaluation.
+     * 
+     * @param remainingDepth The remaining levels the minimax cannot
+     * 						 evaluate due to absence of data.
+     * @return A double of value 12.0 for remaining depths greater or equal 
+     * 		   to 2, and of value 20.0 for remaining depths lesser or equal
+     * 		   to 1.  
+     */
+    private double doFixedEvaluation(int remainingDepth) {
+    	if (remainingDepth <= 1) return 20.0;
+    	else return 12.0;
+    }
+    
+    /**
+     * Does a heuristic evaluation of the given move, based on the
      * given board.
      * 
-     * Evaluation is done using solely a CandiesRemovedHeuristic.
+     * Evaluation is done using the following heuristics:
+     *   -CandiesRemovedHeuristic
+     *   -DistanceFromTopHeuristic
      * 
      * @param board A board on which the move will be evaluated.
      * @param move The move to be evaluated.
      * @return A double representing how good the move is.
      */
-    private double simpleHeuristicEvaluation(Board board, PlayerMove move) {
+    private double doHeuristicEvaluation(Board board, PlayerMove move) {
     	
     	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.7));
     	
@@ -320,21 +335,4 @@ public class MinMaxPlayer implements AbstractPlayer {
     	
     	return engine.evaluate();
     }
-
-// ==== Unused Code ====
-//    
-//    /**
-//     * 
-//     * @param board
-//     * @param move
-//     * @return
-//     */
-//    private double complexHeuristicEvaluation(Board board, PlayerMove move) {
-//    	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.0));
-//    	
-//    	engine.add(new CandiesRemovedHeuristic(move, board), SliderMathModel.VERY_HIGH);
-//    	//engine.add(new DistanceFromTopHeuristic(move, board), SliderMathModel.VERY_LOW);
-//    	
-//    	return engine.evaluate();
-//    }
 }
