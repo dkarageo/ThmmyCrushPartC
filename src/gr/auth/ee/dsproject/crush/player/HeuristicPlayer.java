@@ -321,6 +321,7 @@ public class HeuristicPlayer implements AbstractPlayer {
     	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.0));
     	
     	engine.add(new CandiesRemovedHeuristic(move, board), SliderMathModel.VERY_HIGH);
+    	engine.add(new DistanceFromTopHeuristic(move, board), SliderMathModel.VERY_LOW);
     	
     	return engine.evaluate();
     }
