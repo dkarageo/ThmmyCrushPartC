@@ -399,7 +399,7 @@ public class BoardUtils {
 	 *  
 	 * If x1 == x2 && y1 == y2 it returns 0.
 	 */
-	public class TileFirstByYThenByX implements Comparator<Tile> {
+	public static class TileFirstByYThenByX implements Comparator<Tile> {
 		public int compare(Tile t1, Tile t2) {
 			int x1 = t1.getX();
 			int x2 = t2.getX();
