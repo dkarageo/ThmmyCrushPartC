@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import gr.auth.ee.dsproject.crush.board.Board;
 import gr.auth.ee.dsproject.crush.board.CrushUtilities;
 import gr.auth.ee.dsproject.crush.defplayers.AbstractPlayer;
-import gr.auth.ee.dsproject.crush.heuristics.*;
 import gr.auth.ee.dsproject.crush.node.Node;
 import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
 
@@ -191,22 +190,8 @@ public class MinMaxPlayer implements AbstractPlayer {
     	// opposite than maximizing. This happens because the first call
     	// is the root node, and for every move it's effect is calculated
     	// on the next run. 
-    	if (n.getParent() == null) {
-    		// If parent is null, then no move lead to current state so
-    		// evaluation of current state is 0.
-    		n.setNodeEvaluation(0);
-    	
-    	} else if (maximizing) {
-    		n.setNodeEvaluation(
-    				-doHeuristicEvaluation(n.getParent().getNodeBoard(), n.getNodeMove())
-    		);
-    	
-    	} else {
-    		n.setNodeEvaluation(
-    				doHeuristicEvaluation(n.getParent().getNodeBoard(), n.getNodeMove())
-    		);
-    	}
-    	
+    	n.evaluate(maximizing);
+    	    	
     	// If current node is not a leaf, then evaluate its children,
     	// and form the overall evaluation by using the ones from deeper
     	// levels.
@@ -314,25 +299,5 @@ public class MinMaxPlayer implements AbstractPlayer {
     	else return 12.0;
     }
     
-    /**
-     * Does a heuristic evaluation of the given move, based on the
-     * given board.
-     * 
-     * Evaluation is done using the following heuristics:
-     *   -CandiesRemovedHeuristic
-     *   -DistanceFromTopHeuristic
-     * 
-     * @param board A board on which the move will be evaluated.
-     * @param move The move to be evaluated.
-     * @return A double representing how good the move is.
-     */
-    private double doHeuristicEvaluation(Board board, PlayerMove move) {
-    	
-    	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.7));
-    	
-    	engine.add(new CandiesRemovedHeuristic(move, board), SliderMathModel.VERY_HIGH);
-    	engine.add(new DistanceFromTopHeuristic(move, board), SliderMathModel.VERY_LOW);
-    	
-    	return engine.evaluate();
-    }
+    
 }
