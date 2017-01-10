@@ -3,6 +3,7 @@ package gr.auth.ee.dsproject.crush.node;
 import java.util.ArrayList;
 
 import gr.auth.ee.dsproject.crush.board.Board;
+import gr.auth.ee.dsproject.crush.board.CrushUtilities;
 import gr.auth.ee.dsproject.crush.heuristics.HeuristicsEngine;
 import gr.auth.ee.dsproject.crush.heuristics.SliderMathModel;
 import gr.auth.ee.dsproject.crush.player.CandiesRemovedHeuristic;
@@ -36,6 +37,7 @@ import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
  * -public void setNodeMove(PlayerMove nodeMove)
  * -public void setNodeEvaluation(double nodeEvaluation)
  * -public void addChild(Node child) throws NullNodeRuntimeException
+ * -public void createChildren()
  * -public double evaluate(boolean negative)
  * 
  * Private methods defined in Node:
@@ -257,6 +259,35 @@ public class Node {
 	}
 	
 	/**
+     * Creates all the children of the current node.
+     * 
+     * It creates all the children, i.e. the next states,
+     * that are possible based on the board of the current node.
+     * 
+     * It finds out all possible moves on the board of current node
+     * and for every single one of these moves creates a child node
+     * with its move set to the move lead there, its board set to
+     * the board this move caused to be created and parent set to
+     * given node.
+     */
+    public void createChildren() {
+    	
+    	for (int[] dirMove : CrushUtilities.getAvailableMoves(nodeBoard)) {
+    		
+    		// Convert old style move of [x, y, direction] to PlayerMove object.
+    		int[] cordsMove = CrushUtilities.calculateNextMove(dirMove);
+    		PlayerMove move = new PlayerMove(
+    				nodeBoard.giveTileAt(cordsMove[0], cordsMove[1]),
+    				nodeBoard.giveTileAt(cordsMove[2], cordsMove[3])
+    		);
+    		
+    		Board afterMoveBoard = CrushUtilities.boardAfterFullMove(nodeBoard, dirMove);
+    		
+    		addChild(new Node(this, afterMoveBoard, move));
+    	}
+    }
+	
+	/**
 	 * Evaluates the move associated with this node and sets its evaluation
 	 * to it.
 	 * 
@@ -272,6 +303,7 @@ public class Node {
 	 * @return The evaluation in the form of a double.
 	 */
 	public double evaluate(boolean negative) {
+		
 		if (parent == null) {
     		// If parent is null, then no move lead to current state so
     		// evaluation of current state is 0.
