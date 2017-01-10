@@ -1,3 +1,15 @@
+/**
+ * Implementation of MinMaxPlayer class provided by:
+ * -Dimitrios Karageorgiou
+ *  AEM: 8420
+ *  email: karageods@auth.gr
+ *  phone: +306981647634
+ *  
+ * -Polizois Siois
+ *  AEM: 8535
+ *  email: spolyzois@auth.gr
+ *  phone: 6981799383
+ */
 package gr.auth.ee.dsproject.crush.player;
 
 import java.util.ArrayList;
@@ -32,7 +44,7 @@ import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
  * -public void setName(String name)
  * -public int[] getNextMove(ArrayList<int[]> availableMoves, Board board)
  * 
- * @author Dimitrios Karageorgiou
+ * @author Dimitrios Karageorgiou, Polizois Siois
  * @version 0.3
  */
 public class MinMaxPlayer implements AbstractPlayer {

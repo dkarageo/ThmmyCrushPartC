@@ -1,3 +1,15 @@
+/**
+ * Implementation of PlayerMove class provided by:
+ * -Dimitrios Karageorgiou
+ *  AEM: 8420
+ *  email: karageods@auth.gr
+ *  phone: +306981647634
+ *  
+ * -Polizois Siois
+ *  AEM: 8535
+ *  email: spolyzois@auth.gr
+ *  phone: 6981799383
+ */
 package gr.auth.ee.dsproject.crush.player.move;
 
 import gr.auth.ee.dsproject.crush.board.CrushUtilities;
@@ -32,7 +44,7 @@ import gr.auth.ee.dsproject.crush.board.Tile;
  *  -public int[] toCordsArray() throws EmptyMoveRuntimeException
  *  -public int[] toDirArray() throws SameTilesRuntimeException, InvalidDirectionRuntimeException
  *  
- * @author Dimitrios Karageorgiou
+ * @author Dimitrios Karageorgiou, Polizois Siois
  * @version 1.1
  * 
  */

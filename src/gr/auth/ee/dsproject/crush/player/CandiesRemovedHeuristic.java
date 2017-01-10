@@ -1,3 +1,15 @@
+/**
+ * Implementation of CandiesRemovedHeuristic class provided by:
+ * -Dimitrios Karageorgiou
+ *  AEM: 8420
+ *  email: karageods@auth.gr
+ *  phone: +306981647634
+ *  
+ * -Polizois Siois
+ *  AEM: 8535
+ *  email: spolyzois@auth.gr
+ *  phone: 6981799383
+ */
 package gr.auth.ee.dsproject.crush.player;
 
 import java.util.HashSet;
@@ -43,7 +55,7 @@ import gr.auth.ee.dsproject.crush.util.BoardUtils;
  * -public Set<Tile> initialCandiesRemoved()
  * -public int countChainedCandiesRemoved(Board currentBoard)																			   
  * 
- * @author Dimitrios Karageorgiou
+ * @author Dimitrios Karageorgiou, Polizois Siois
  * @version 0.3
  */
 public class CandiesRemovedHeuristic extends Heuristic {

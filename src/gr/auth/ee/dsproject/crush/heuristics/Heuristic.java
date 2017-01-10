@@ -1,5 +1,14 @@
 /**
- * 
+ * Implementation of Heuristic class provided by:
+ * -Dimitrios Karageorgiou
+ *  AEM: 8420
+ *  email: karageods@auth.gr
+ *  phone: +306981647634
+ *  
+ * -Polizois Siois
+ *  AEM: 8535
+ *  email: spolyzois@auth.gr
+ *  phone: 6981799383
  */
 package gr.auth.ee.dsproject.crush.heuristics;
 
@@ -21,7 +30,7 @@ package gr.auth.ee.dsproject.crush.heuristics;
  * -public double getRange()
  * -public abstract double evaluate()
  * 
- * @author Dimitrios Karageorgiou
+ * @author Dimitrios Karageorgiou, Polizois Siois
  * @version 0.1
  */
 public abstract class Heuristic {

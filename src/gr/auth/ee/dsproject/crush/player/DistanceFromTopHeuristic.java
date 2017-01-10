@@ -1,3 +1,15 @@
+/**
+ * Implementation of DistanceFromTopHeuristic class provided by:
+ * -Dimitrios Karageorgiou
+ *  AEM: 8420
+ *  email: karageods@auth.gr
+ *  phone: +306981647634
+ *  
+ * -Polizois Siois
+ *  AEM: 8535
+ *  email: spolyzois@auth.gr
+ *  phone: 6981799383
+ */
 package gr.auth.ee.dsproject.crush.player;
 
 import gr.auth.ee.dsproject.crush.heuristics.Heuristic;
@@ -27,7 +39,7 @@ import gr.auth.ee.dsproject.crush.board.Board;
  * -public Board getBoard()
  * -public double evaluate()
  * 
- * @author Dimitrios Karageorgiou
+ * @author Dimitrios Karageorgiou, Polizois Siois
  * @version 0.3
  */
 public class DistanceFromTopHeuristic extends Heuristic {
