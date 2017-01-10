@@ -126,42 +126,7 @@ public class MinMaxPlayer implements AbstractPlayer {
 
    
 //==== Private Methods ====
-    
-    /**
-     * Creates all the children of the given node.
-     * 
-     * It creates all the children, i.e. the next states,
-     * that are possible based on the board of the given node.
-     * 
-     * It finds out all possible moves on the board of given node
-     * and for every single one of these moves creates a child node
-     * with its move set to the move lead there, its board set to
-     * the board this move caused to be created and parent set to
-     * given node.
-     * 
-     * @param n The node whose children should be created.
-     */
-    private void createChildren(Node n) {
-
-    	Board curBoard = n.getNodeBoard();
-    	
-    	for (int[] dirMove : CrushUtilities.getAvailableMoves(curBoard)) {
-    		
-    		// Convert old style move of [x, y, direction] to PlayerMove object.
-    		int[] cordsMove = CrushUtilities.calculateNextMove(dirMove);
-    		PlayerMove move = new PlayerMove(
-    				curBoard.giveTileAt(cordsMove[0], cordsMove[1]),
-    				curBoard.giveTileAt(cordsMove[2], cordsMove[3])
-    		);
-    		
-    		Board afterMoveBoard = CrushUtilities.boardAfterFullMove(curBoard, dirMove);
-    		
-    		Node child = new Node(n, afterMoveBoard, move);
-    		
-    		n.addChild(child);
-    	}
-    }
-    
+        
     /**
      * Creates a memory optimized A-B pruned minimax tree under 
      * the root node, which should only be used for accessing root
@@ -208,7 +173,7 @@ public class MinMaxPlayer implements AbstractPlayer {
     	// and form the overall evaluation by using the ones from deeper
     	// levels.
     	if (depth != 0) {
-    		createChildren(n);
+    		n.createChildren();
     		
     		if (n.getChildren().size() == 0 ) {
     			// If known available moves on the board have been 
@@ -309,7 +274,5 @@ public class MinMaxPlayer implements AbstractPlayer {
     private double doFixedEvaluation(int remainingDepth) {
     	if (remainingDepth <= 1) return 20.0;
     	else return 12.0;
-    }
-    
-    
+    }    
 }
