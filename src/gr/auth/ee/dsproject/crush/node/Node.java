@@ -15,6 +15,10 @@ package gr.auth.ee.dsproject.crush.node;
 import java.util.ArrayList;
 
 import gr.auth.ee.dsproject.crush.board.Board;
+import gr.auth.ee.dsproject.crush.heuristics.HeuristicsEngine;
+import gr.auth.ee.dsproject.crush.heuristics.SliderMathModel;
+import gr.auth.ee.dsproject.crush.player.CandiesRemovedHeuristic;
+import gr.auth.ee.dsproject.crush.player.DistanceFromTopHeuristic;
 import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
 
 
@@ -44,6 +48,10 @@ import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
  * -public void setNodeMove(PlayerMove nodeMove)
  * -public void setNodeEvaluation(double nodeEvaluation)
  * -public void addChild(Node child) throws NullNodeRuntimeException
+ * -public double evaluate(boolean negative)
+ * 
+ * Private methods defined in Node:
+ * -private double doHeuristicEvaluation(Board board, PlayerMove move)
  * 
  * Exceptions defined in Node:
  * -public static class NullNodeRuntimeException extends RuntimeException
@@ -260,7 +268,67 @@ public class Node {
 		children.add(child);
 	}
 	
+	/**
+	 * Evaluates the move associated with this node and sets its evaluation
+	 * to it.
+	 * 
+	 * Move is evaluated using a heuristic evaluation upon it.
+	 * 
+	 * Evaluation is done using the move of this node, i.e. the move which
+	 * caused the current node to be created and the board of the previous
+	 * state, i.e. the parent's board. Evaluation on root nodes, i.e. nodes
+	 * that do not have parent, is always 0.
+	 * 
+	 * @param negative Defines whether this node should be evaluated positively
+	 * 				   or negatively.
+	 * @return The evaluation in the form of a double.
+	 */
+	public double evaluate(boolean negative) {
+		if (parent == null) {
+    		// If parent is null, then no move lead to current state so
+    		// evaluation of current state is 0.
+    		setNodeEvaluation(0);
+    	
+    	} else if (negative) {
+    		setNodeEvaluation(
+    				-doHeuristicEvaluation(parent.getNodeBoard(), nodeMove)
+    		);
+    	
+    	} else {
+    		setNodeEvaluation(
+    				doHeuristicEvaluation(parent.getNodeBoard(), nodeMove)
+    		);
+    	}
+		
+		return nodeEvaluation;
+	}
 
+	
+//==== Private methods ====
+	
+	/**
+     * Does a heuristic evaluation of the given move, based on the
+     * given board.
+     * 
+     * Evaluation is done using the following heuristics:
+     *   -CandiesRemovedHeuristic
+     *   -DistanceFromTopHeuristic
+     * 
+     * @param board A board on which the move will be evaluated.
+     * @param move The move to be evaluated.
+     * @return A double representing how good the move is.
+     */
+    private double doHeuristicEvaluation(Board board, PlayerMove move) {
+    	
+    	HeuristicsEngine engine = new HeuristicsEngine(new SliderMathModel(1.7));
+    	
+    	engine.add(new CandiesRemovedHeuristic(move, board), SliderMathModel.VERY_HIGH);
+    	engine.add(new DistanceFromTopHeuristic(move, board), SliderMathModel.VERY_LOW);
+    	
+    	return engine.evaluate();
+    }
+    
+	
 //==== Exceptions defined in Node ====
 	
 	/**
