@@ -61,20 +61,20 @@ import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
  * @author Dimitrios Karageorgiou, Polizois Siois
  * @version 0.3
  */
-public class Node {
+public class Node84208535 {
 	
 //==== Private instance variables ====
 	
 	/**
 	 * The parent node of this node.
 	 */
-	private Node parent;
+	private Node84208535 parent;
 	
 	/**
 	 * An ArrayList containing all the children nodes of this 
 	 * node.
 	 */
-	private ArrayList<Node> children;
+	private ArrayList<Node84208535> children;
 	
 	/**
 	 * The depth current node has in the Tree.
@@ -102,7 +102,7 @@ public class Node {
 	/**
 	 * Create a Node object without any arguments.
 	 */
-	public Node() {
+	public Node84208535() {
 		children = new ArrayList<>();
 	}
 	
@@ -112,7 +112,7 @@ public class Node {
 	 * @param parent The Node to be considered the parent one in
 	 * 				 the tree.
 	 */
-	public Node(Node parent) {
+	public Node84208535(Node84208535 parent) {
 		this();
 		this.parent = parent;
 	}
@@ -125,7 +125,7 @@ public class Node {
 	 * 				 the tree.
 	 * @param board The board associated with this node.
 	 */
-	public Node(Node parent, Board board) {
+	public Node84208535(Node84208535 parent, Board board) {
 		this();
 		this.parent = parent;
 		this.nodeBoard = board;
@@ -143,7 +143,7 @@ public class Node {
 	 * @param move A PlayerMove object representing the move which lead
 	 * 			   to current state. For root nodes it may be null.
 	 */
-	public Node(Node parent, Board board, PlayerMove move) {
+	public Node84208535(Node84208535 parent, Board board, PlayerMove move) {
 		this();
 		this.parent = parent;
 		this.nodeBoard = board;
@@ -159,7 +159,7 @@ public class Node {
 	 * @return The parent Node object associated with
 	 * 		   this node.
 	 */
-	public Node getParent() { return this.parent; }
+	public Node84208535 getParent() { return this.parent; }
 	
 	/**
 	 * Get the children of this node.
@@ -167,7 +167,7 @@ public class Node {
 	 * @return An ArrayList<Node> object containing all the
 	 * 		   children nodes of this node.
 	 */
-	public ArrayList<Node> getChildren() { return this.children; }
+	public ArrayList<Node84208535> getChildren() { return this.children; }
 	
 	/**
 	 * Get the board of this node.
@@ -208,7 +208,7 @@ public class Node {
 	 * @param parent A Node object that will be set as parent of
 	 * 				 the current one.
 	 */
-	public void setParent(Node parent) { this.parent = parent; }
+	public void setParent(Node84208535 parent) { this.parent = parent; }
 	
 	/**
 	 * Set the children nodes of this node.
@@ -216,7 +216,7 @@ public class Node {
 	 * @param children An ArrayList<Node> object containing all
 	 * 				   children nodes of the current one.
 	 */
-	public void setChildren(ArrayList<Node> children) { this.children = children; }
+	public void setChildren(ArrayList<Node84208535> children) { this.children = children; }
 	
 	/**
 	 * Sets given board as the board of this node.
@@ -261,7 +261,7 @@ public class Node {
 	 * 				node.
 	 * @throws NullNodeRuntimeException
 	 */
-	public void addChild(Node child) throws NullNodeRuntimeException 
+	public void addChild(Node84208535 child) throws NullNodeRuntimeException 
 	{
 		if(child == null) throw new NullNodeRuntimeException();
 		
@@ -295,7 +295,7 @@ public class Node {
     		
     		Board afterMoveBoard = CrushUtilities.boardAfterFullMove(nodeBoard, dirMove);
     		
-    		addChild(new Node(this, afterMoveBoard, move));
+    		addChild(new Node84208535(this, afterMoveBoard, move));
     	}
     }
 	

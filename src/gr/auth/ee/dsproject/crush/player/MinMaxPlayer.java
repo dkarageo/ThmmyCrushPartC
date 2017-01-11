@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import gr.auth.ee.dsproject.crush.board.Board;
 import gr.auth.ee.dsproject.crush.board.CrushUtilities;
 import gr.auth.ee.dsproject.crush.defplayers.AbstractPlayer;
-import gr.auth.ee.dsproject.crush.node.Node;
+import gr.auth.ee.dsproject.crush.node.Node84208535;
 import gr.auth.ee.dsproject.crush.player.move.PlayerMove;
 
 
@@ -115,7 +115,7 @@ public class MinMaxPlayer implements AbstractPlayer {
     	
     	// Create the root node representing current state of board.
     	// This is the initial state for minimax.
-    	Node root = new Node(null, CrushUtilities.cloneBoard(board, 45), null);
+    	Node84208535 root = new Node84208535(null, CrushUtilities.cloneBoard(board, 45), null);
     	
     	// Create the minimax tree to the depth defined by MINIMAX_DEPTH constant.
     	createMinimaxTree(root, MINIMAX_DEPTH, -Double.MAX_VALUE, Double.MAX_VALUE, true);
@@ -159,7 +159,7 @@ public class MinMaxPlayer implements AbstractPlayer {
      * 					 false for getting evaluation for enemy's perspective.	
      * @return The evaluation of the current state for given player.
      */
-    private double createMinimaxTree(Node n, int depth, double min, 
+    private double createMinimaxTree(Node84208535 n, int depth, double min, 
     								 double max, boolean maximizing) 
     {    	
     	// Find the evaluation of current state. Since this method is going
@@ -192,7 +192,7 @@ public class MinMaxPlayer implements AbstractPlayer {
     		if (maximizing) {
     			double cMax = -Double.MAX_VALUE;
     			
-    			for (Node child : n.getChildren()) {
+    			for (Node84208535 child : n.getChildren()) {
     				double eval = createMinimaxTree(child, depth - 1, cMax, max, false);
     				
     				cMax = Math.max(cMax, eval);
@@ -208,7 +208,7 @@ public class MinMaxPlayer implements AbstractPlayer {
     		} else {
     			double cMin = Double.MAX_VALUE;
     			
-    			for (Node child : n.getChildren()) {
+    			for (Node84208535 child : n.getChildren()) {
     				double eval = createMinimaxTree(child, depth - 1, cMin, max, true);
     				
     				cMin = Math.min(cMin, eval);
@@ -242,12 +242,12 @@ public class MinMaxPlayer implements AbstractPlayer {
      * @return The move lead to highest scoring branch of
      * 		   the tree.
      */
-    private PlayerMove findBestMove(Node root) {
+    private PlayerMove findBestMove(Node84208535 root) {
     	
     	PlayerMove bestMove = null;
     	double max = -Double.MAX_VALUE;
     	    	
-    	for (Node child : root.getChildren()) {
+    	for (Node84208535 child : root.getChildren()) {
     		double curEval = child.getNodeEvaluation();
     		
     		if (max < curEval) {

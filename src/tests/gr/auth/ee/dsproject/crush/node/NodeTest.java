@@ -15,7 +15,7 @@ public class NodeTest {
 
 	@Test
 	public void testNoArgumentsConstructor() {
-		Node n = new Node();
+		Node84208535 n = new Node84208535();
 		
 		assertEquals(null, n.getParent());
 		assertNotEquals(null, n.getChildren());
@@ -29,9 +29,9 @@ public class NodeTest {
 	
 	@Test
 	public void testParentArgumentConstructor() {
-		Node parent = new Node();
+		Node84208535 parent = new Node84208535();
 		
-		Node n = new Node(parent);
+		Node84208535 n = new Node84208535(parent);
 		
 		assertNotEquals(null, n.getChildren());
 		assertEquals(0, n.getChildren().size());
@@ -45,10 +45,10 @@ public class NodeTest {
 	
 	@Test
 	public void testParentAndBoardArgumentsConstructor() {
-		Node parent = new Node();
+		Node84208535 parent = new Node84208535();
 		Board board = new Board(10);
 		
-		Node n = new Node(parent, board);
+		Node84208535 n = new Node84208535(parent, board);
 		
 		assertNotEquals(null, n.getChildren());
 		assertEquals(0, n.getChildren().size());
@@ -62,11 +62,11 @@ public class NodeTest {
 	
 	@Test
 	public void testParentBoardAndMoveArgumentsConstructor() {
-		Node parent = new Node();
+		Node84208535 parent = new Node84208535();
 		Board board = new Board(10);
 		PlayerMove move = new PlayerMove();
 		
-		Node n = new Node(parent, board, move);
+		Node84208535 n = new Node84208535(parent, board, move);
 		
 		assertNotEquals(null, n.getChildren());
 		assertEquals(0, n.getChildren().size());
@@ -80,8 +80,8 @@ public class NodeTest {
 	
 	@Test
 	public void testSetParent() {
-		Node parent = new Node();
-		Node n = new Node();
+		Node84208535 parent = new Node84208535();
+		Node84208535 n = new Node84208535();
 		n.setParent(parent);
 		
 		assertEquals(parent, n.getParent());
@@ -91,7 +91,7 @@ public class NodeTest {
 	public void testSetNodeBoard() {
 		Board board = new Board(10);
 		
-		Node n = new Node();
+		Node84208535 n = new Node84208535();
 		n.setNodeBoard(board);
 		
 		assertEquals(board, n.getNodeBoard());
@@ -99,8 +99,8 @@ public class NodeTest {
 	
 	@Test
 	public void testSetChildren() {
-		ArrayList<Node> children = new ArrayList<>();
-		Node n = new Node();
+		ArrayList<Node84208535> children = new ArrayList<>();
+		Node84208535 n = new Node84208535();
 		n.setChildren(children);
 		
 		assertEquals(children, n.getChildren());
@@ -108,7 +108,7 @@ public class NodeTest {
 	
 	@Test
 	public void testSetNodeDepth() {
-		Node n = new Node();
+		Node84208535 n = new Node84208535();
 		n.setNodeDepth(2);
 		
 		assertEquals(2, n.getNodeDepth());
@@ -118,7 +118,7 @@ public class NodeTest {
 	public void testSetNodeMove() {
 		PlayerMove move = new PlayerMove(new Tile(), new Tile());
 		
-		Node n = new Node();
+		Node84208535 n = new Node84208535();
 		n.setNodeMove(move);
 		
 		assertEquals(move, n.getNodeMove());
@@ -126,7 +126,7 @@ public class NodeTest {
 	
 	@Test
 	public void testSetNodeEvaluation() {
-		Node n = new Node();
+		Node84208535 n = new Node84208535();
 		n.setNodeEvaluation(38.265);
 		
 		assertEquals(38.265, n.getNodeEvaluation(), 0.001);
@@ -134,12 +134,12 @@ public class NodeTest {
 	
 	@Test
 	public void testAddChildException() {
-		Node n = new Node();
+		Node84208535 n = new Node84208535();
 		boolean ex = false;
 		
 		try {
 			n.addChild(null);
-		} catch (Node.NullNodeRuntimeException e) {
+		} catch (Node84208535.NullNodeRuntimeException e) {
 			ex = true;
 		}
 		
@@ -148,9 +148,9 @@ public class NodeTest {
 	
 	@Test
 	public void testAddChildOnPreviouslyEmptyChildren() {
-		Node n = new Node();
+		Node84208535 n = new Node84208535();
 		
-		Node child = new Node();
+		Node84208535 child = new Node84208535();
 		n.addChild(child);
 		
 		assertNotEquals(null, n.getChildren());
@@ -161,10 +161,10 @@ public class NodeTest {
 	
 	@Test
 	public void testAddChildOnPreviouslyOneChild() {
-		Node n = new Node();
-		n.addChild(new Node());
+		Node84208535 n = new Node84208535();
+		n.addChild(new Node84208535());
 		
-		Node child = new Node();
+		Node84208535 child = new Node84208535();
 		n.addChild(child);
 		
 		assertNotEquals(null, n.getChildren());
